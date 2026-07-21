@@ -11,6 +11,7 @@
   "scripts": {
     "build": "turbo run build",
     "test": "turbo run test",
+    "test:e2e": "turbo run test:e2e",
     "lint": "turbo run lint",
     "check:deps": "depcruise --config .dependency-cruiser.cjs apps packages",
     "dev": "turbo run dev",
