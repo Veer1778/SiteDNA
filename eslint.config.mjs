@@ -6,7 +6,7 @@ import eslintConfigPrettier from "eslint-config-prettier";
 
 export default [
   {
-    ignores: ["**/dist/**", "**/.turbo/**", "**/node_modules/**", "**/coverage/**"],
+    ignores: ["**/dist/**", "**/.next/**", "**/.turbo/**", "**/node_modules/**", "**/coverage/**"],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
@@ -14,7 +14,10 @@ export default [
     rules: {
       // Zod schema files declare a lot of `type X = z.infer<...>` right after the const —
       // that's the intended pattern here, not dead code.
-      "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+      ],
     },
   },
   // Must be last: turns off stylistic rules that would conflict with Prettier's formatting.
