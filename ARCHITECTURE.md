@@ -67,10 +67,14 @@ URL ──▶ crawler ──▶ crawl artifact ──▶ extractor ──▶ par
                                                         editor (Fabric.js)
 ```
 
-## Phase 0 state
+## Current state
 
-As scaffolded, every package/app builds and exports a package-identity constant
-(`PACKAGE_NAME`); only `brand-engine`, `template-engine`, `exporters`, and `apps/web` import
-from `packages/shared`, since those are the packages whose Phase 0 role already touches Brand
-JSON directly. The rest wire up to `packages/shared` as their real logic lands in later phases
-(see the per-package README for each package's target phase).
+- **Phase 0** (scaffold): every package/app builds and exports a package-identity constant
+  (`PACKAGE_NAME`); `brand-engine`, `template-engine`, `exporters`, and `apps/web` import from
+  `packages/shared` since their Phase 0 role already touches Brand JSON directly.
+- **Phase 1** (`packages/crawler`): real. `crawlUrl(url, options)` drives Chromium behind an
+  SSRF/redirect/size guard and returns a `CrawlArtifact` (its own Zod schema, `src/schema.ts` —
+  not part of `packages/shared`, since it's an intermediate shape consumed only by
+  `packages/extractor`).
+- Everything else still wires up to `packages/shared` as its real logic lands in later phases
+  (see the per-package README for each package's target phase).

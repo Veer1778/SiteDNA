@@ -1,14 +1,49 @@
 # @brandkit/crawler
 
-Playwright-based crawler that fetches a URL and returns a normalized, SSRF-hardened crawl
-artifact: rendered HTML, stylesheets, computed styles for key elements, screenshots, and
-asset/favicon candidates. Implemented in Phase 1 (see [Claude.md](../../Claude.md)).
+Playwright-based crawler that fetches a single URL and returns a normalized, SSRF-hardened
+`CrawlArtifact`: rendered HTML, stylesheets (linked + inline), computed styles for key elements,
+full-page and viewport screenshots, and asset/favicon candidates. Consumed by
+`packages/extractor` in Phase 2 — see [Claude.md](../../Claude.md) and
+[ARCHITECTURE.md](../../ARCHITECTURE.md).
 
-## Current state (Phase 0)
+## Usage
 
-Stub only — exports `PACKAGE_NAME` so the package is genuinely buildable and testable ahead of
-Phase 1's crawl logic. No dependency on `packages/shared` yet; the crawl artifact it will
-produce is a separate shape from Brand JSON, consumed by `packages/extractor`.
+```ts
+import { crawlUrl, writeCrawlArtifactToDir } from "@brandkit/crawler";
+
+const artifact = await crawlUrl("https://example.com", {
+  onLog: (event) => console.log(event),
+});
+
+await writeCrawlArtifactToDir(artifact, "./out/example-com");
+```
+
+`pnpm --filter @brandkit/crawler crawl <url> [outDir]` runs the same thing from the CLI —
+useful for manual verification and for generating fixtures for Phase 2.
+
+## Security hardening
+
+- **SSRF**: every request (main navigation, redirects, subresources) is resolved via DNS and
+  checked against loopback/link-local/RFC1918/unique-local ranges before being allowed —
+  `src/security/url-guard.ts`. `CrawlOptions.allowPrivateNetwork` is a test-only escape hatch
+  used by this package's own integration test; never set it for real crawls.
+- **Redirects**: capped at `maxRedirects` (default 5); each hop is independently SSRF-checked.
+- **Timeouts**: `navigationTimeoutMs` (default 15s) bounds page load; `totalTimeoutMs` (default
+  30s) bounds the whole crawl.
+- **Response size**: best-effort cap via `Content-Length` (default 25MB) — a response that omits
+  that header is not currently bounded before download; closing that gap needs streaming reads
+  and is deferred past Phase 1.
+- **robots.txt**: respected by default (`respectRobotsTxt: true`); disable per-call if needed.
+
+## Schema
+
+`CrawlArtifactSchema` (Zod) lives in `src/schema.ts`, fully JSDoc'd. It intentionally is **not**
+part of `packages/shared` — it's an intermediate shape, not Brand JSON.
+
+## Fixtures
+
+`examples/fixtures/sites/basic/` is a small static site (served by a local `http` server, never
+a live URL) used by the integration test in `src/crawl.test.ts`.
 
 ## Build/test in isolation
 
@@ -16,3 +51,6 @@ produce is a separate shape from Brand JSON, consumed by `packages/extractor`.
 pnpm --filter @brandkit/crawler build
 pnpm --filter @brandkit/crawler test
 ```
+
+Requires Chromium's Playwright binary once: `pnpm --filter @brandkit/crawler exec playwright
+install chromium`.

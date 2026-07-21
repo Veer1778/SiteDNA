@@ -64,7 +64,8 @@ All of the above must pass before any change is considered done — see the root
 
 ## Contributing
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md).
+See [CONTRIBUTING.md](./CONTRIBUTING.md). See [CHANGELOG.md](./CHANGELOG.md) for what's shipped
+so far, by phase.
 
 ## License
 
