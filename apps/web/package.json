@@ -5,18 +5,31 @@
   "description": "Next.js app: Hono-backed API routes and the web UI for submitting URLs and viewing generated Brand Kits.",
   "license": "MIT",
   "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsc -b",
+    "build": "next build",
     "test": "vitest run",
     "lint": "eslint .",
-    "dev": "echo \"apps/web: no dev server yet (added in Phase 5)\""
+    "dev": "next dev"
   },
   "dependencies": {
-    "@brandkit/shared": "workspace:*"
+    "@asteasolutions/zod-to-openapi": "^7.3.4",
+    "@aws-sdk/client-s3": "^3.1091.0",
+    "@brandkit/brand-engine": "workspace:*",
+    "@brandkit/crawler": "workspace:*",
+    "@brandkit/extractor": "workspace:*",
+    "@brandkit/shared": "workspace:*",
+    "@brandkit/vision": "workspace:*",
+    "@hono/zod-validator": "^0.7.2",
+    "@supabase/supabase-js": "^2.110.7",
+    "hono": "^4.12.31",
+    "next": "^16.2.10",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
     "typescript": "^5.7.2",
     "vitest": "^2.1.8"
   }

@@ -4,6 +4,38 @@ All notable changes to this project are documented here, in [Keep a Changelog](h
 format. This project doesn't ship versioned releases yet (see [ROADMAP via Claude.md](./Claude.md)),
 so entries are grouped by phase rather than version number.
 
+## [Phase 5a] — API
+
+### Added
+
+- `apps/web` is now a real Next.js app: Hono routes mounted at `/api` via a single catch-all
+  route handler (`app/api/[[...route]]/route.ts`) — one process serves API + UI.
+- `POST /analyze`, `GET /brand/:id` (doubles as the status endpoint), `GET /assets/:id`,
+  `GET /components/:id`, `GET /api/openapi.json`.
+- In-process async job model (`src/jobs.ts`): `queued → crawling → extracting → analyzing (if
+`ANTHROPIC_API_KEY` set) → done`/`failed`. Every pipeline package's `onLog` now actually gets
+  consumed — server console (`src/log.ts`) and each job's persisted `logs`.
+- `JobStore`/`AssetStore` interfaces (`src/storage/`): a fully-tested local filesystem adapter
+  (default, zero env vars) plus real Supabase (jobs) and Cloudflare R2 (assets) adapters,
+  constructed only when their env vars are set, untested here (no credentials available) — same
+  spirit as `AnthropicVisionProvider` in Phase 3.
+- In-memory sliding-window rate limiter (`src/rate-limit.ts`) on `POST /analyze`.
+- OpenAPI 3.0 document generated from the same Zod schemas the routes validate against, via
+  `@asteasolutions/zod-to-openapi` (zod v3) — not `@hono/zod-openapi`, which requires zod v4 and
+  would fork the whole monorepo's zod version.
+- Backend integration tests (`src/app.test.ts`, `src/jobs.test.ts`) exercise the full
+  crawl→extract→merge→API flow against `packages/crawler`'s local fixture site — never a live
+  site — the acceptance-criterion E2E proxy until Phase 5b adds the real Playwright test.
+- Root `eslint.config.mjs` now ignores `.next/` and supports `varsIgnorePattern` for
+  intentionally-unused destructured vars (e.g. omitting a field via rest-spread).
+- Root `turbo.json`'s `build` task outputs now include `.next/**` (excluding its cache dir).
+
+### Style direction
+
+- The web UI (Phase 5b) will be **Light Mode Skeumorphism**, per project direction — this
+  supersedes `Claude.md`'s original "dark mode" bullet; dark mode is dropped entirely rather
+  than kept alongside it.
+
 ## [Phase 4] — Brand Engine
 
 ### Added

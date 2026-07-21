@@ -20,6 +20,7 @@ package-specific shape.
 
 ```
 apps/web
+  ├─ packages/crawler, extractor, vision, brand-engine (the pipeline, called from src/jobs.ts)
   └─ packages/shared
 
 packages/brand-engine
@@ -112,5 +113,17 @@ refinedAssets, logoSuggestion }`: `brandJson` is the spec-mandated, schema-valid
   would need brand-engine to fetch bytes itself, breaking the "no I/O" pipeline). Tested against
   a self-contained recorded fixture (golden-file test) plus a `fast-check` property test
   asserting the output always validates against `BrandJsonSchema`.
+- **Phase 5a** (`apps/web`, API half): real. Hono routes mounted into Next.js App Router at
+  `/api` via a single catch-all route handler (one process serves both API and UI — no separate
+  server). `POST /analyze` starts an in-process async job (`src/jobs.ts`: `crawling →
+extracting → analyzing (if configured) → done`/`failed`, no real job queue); `GET /brand/:id`
+  doubles as the status endpoint. `JobStore`/`AssetStore` are interfaces with a fully-tested
+  local filesystem adapter (default, zero env vars) and real-but-untested Supabase/R2 adapters
+  — same spirit as Phase 3's vision provider split. OpenAPI is generated with
+  `@asteasolutions/zod-to-openapi` (zod v3), not `@hono/zod-openapi` (zod v4 — would fork the
+  whole monorepo's zod version). This is also where every pipeline package's `onLog` finally
+  gets consumed for real: server console plus each job's persisted `logs`. Phase 5b (the web UI,
+  Light Mode Skeumorphism per project direction — not the spec's original dark-mode bullet)
+  follows as a separate branch/merge.
 - Everything else still wires up to `packages/shared` as its real logic lands in later phases
   (see the per-package README for each package's target phase).
