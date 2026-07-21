@@ -1,0 +1,144 @@
+{
+  "schemaVersion": "1.0.0",
+  "sourceUrl": "https://example.com",
+  "extractedAt": "2026-07-21T12:00:00.000Z",
+  "logo": {
+    "light": {
+      "url": "https://example.com/logo-light.svg",
+      "width": 240,
+      "height": 64,
+      "format": "svg"
+    },
+    "dark": {
+      "url": "https://example.com/logo-dark.svg",
+      "width": 240,
+      "height": 64,
+      "format": "svg"
+    },
+    "favicon": {
+      "url": "https://example.com/favicon.ico",
+      "width": 32,
+      "height": 32,
+      "format": "ico"
+    }
+  },
+  "colors": {
+    "primary": {
+      "hex": "#1a56db",
+      "confidence": 1.5
+    },
+    "secondary": {
+      "hex": "#7e3af2",
+      "confidence": 0.82
+    },
+    "accent": {
+      "hex": "#0e9f6e",
+      "confidence": 0.7
+    },
+    "surface": {
+      "hex": "#f9fafb",
+      "confidence": 0.9
+    },
+    "background": {
+      "hex": "#ffffff",
+      "confidence": 0.99
+    },
+    "text": {
+      "hex": "#111827",
+      "confidence": 0.97
+    },
+    "border": {
+      "hex": "#e5e7eb",
+      "confidence": 0.88
+    },
+    "success": {
+      "hex": "#0e9f6e",
+      "confidence": 0.6
+    },
+    "warning": {
+      "hex": "#c27803",
+      "confidence": 0.6
+    },
+    "danger": {
+      "hex": "#e02424",
+      "confidence": 0.65
+    }
+  },
+  "typography": {
+    "heading": {
+      "families": ["Inter", "system-ui", "sans-serif"],
+      "weights": [600, 700],
+      "sizes": [24, 32, 48],
+      "letterSpacing": [-0.5, 0],
+      "lineHeights": [1.1, 1.2]
+    },
+    "body": {
+      "families": ["Inter", "system-ui", "sans-serif"],
+      "weights": [400, 500],
+      "sizes": [14, 16, 18],
+      "letterSpacing": [0],
+      "lineHeights": [1.5]
+    }
+  },
+  "spacing": [4, 8, 12, 16, 24, 32, 48, 64],
+  "radius": [4, 8, 16],
+  "shadows": [
+    {
+      "offsetX": 0,
+      "offsetY": 1,
+      "blur": 2,
+      "spread": 0,
+      "color": "#000000",
+      "inset": false
+    },
+    {
+      "offsetX": 0,
+      "offsetY": 4,
+      "blur": 6,
+      "spread": -1,
+      "color": "#000000",
+      "inset": false
+    }
+  ],
+  "animations": {
+    "durations": [150, 200, 300],
+    "easings": ["ease-in-out", "cubic-bezier(0.4,0,0.2,1)"]
+  },
+  "components": [
+    {
+      "type": "button",
+      "screenshotRef": "components/button-primary.png",
+      "boundingBox": {
+        "x": 24,
+        "y": 480,
+        "width": 120,
+        "height": 40
+      }
+    },
+    {
+      "type": "nav",
+      "screenshotRef": "components/nav.png",
+      "boundingBox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 72
+      }
+    }
+  ],
+  "voice": ["confident", "technical", "friendly"],
+  "styleClassification": [
+    {
+      "label": "modern",
+      "score": 0.88
+    },
+    {
+      "label": "stripe-like",
+      "score": 0.74
+    },
+    {
+      "label": "minimal",
+      "score": 0.61
+    }
+  ]
+}

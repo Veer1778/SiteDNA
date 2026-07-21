@@ -1,0 +1,23 @@
+{
+  "name": "@brandkit/web",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Next.js app: Hono-backed API routes and the web UI for submitting URLs and viewing generated Brand Kits.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -b",
+    "test": "vitest run",
+    "lint": "eslint .",
+    "dev": "echo \"apps/web: no dev server yet (added in Phase 5)\""
+  },
+  "dependencies": {
+    "@brandkit/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "files": [],
+  "references": [
+    { "path": "apps/web" },
+    { "path": "packages/shared" },
+    { "path": "packages/crawler" },
+    { "path": "packages/extractor" },
+    { "path": "packages/vision" },
+    { "path": "packages/brand-engine" },
+    { "path": "packages/template-engine" },
+    { "path": "packages/editor" },
+    { "path": "packages/exporters" },
+    { "path": "packages/ui" }
+  ]
+}

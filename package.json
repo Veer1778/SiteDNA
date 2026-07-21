@@ -1,0 +1,32 @@
+{
+  "name": "brandkit-ai",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Open-source website branding extraction platform.",
+  "license": "MIT",
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "check:deps": "depcruise --config .dependency-cruiser.cjs apps packages",
+    "dev": "turbo run dev",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.1.1",
+    "dependency-cruiser": "^18.1.0",
+    "eslint": "^10.7.0",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.9.6",
+    "turbo": "^2.10.5",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.65.0",
+    "vitest": "^2.1.8"
+  }
+}

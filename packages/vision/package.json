@@ -1,0 +1,26 @@
+{
+  "name": "@brandkit/vision",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Provider-agnostic Vision AI interface that classifies design language, brand personality, and visual style from screenshots.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "test": "vitest run",
+    "lint": "eslint ."
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}
