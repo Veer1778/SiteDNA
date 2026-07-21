@@ -40,6 +40,13 @@ useful for manual verification and for generating fixtures for Phase 2.
 `CrawlArtifactSchema` (Zod) lives in `src/schema.ts`, fully JSDoc'd. It intentionally is **not**
 part of `packages/shared` — it's an intermediate shape, not Brand JSON.
 
+## Reusable SSRF guard
+
+`normalizeUrl`, `resolveAndValidateHost`, `isPrivateOrReservedIp`, and the `DnsLookup` type
+(`src/security/url-guard.ts`) are public exports so other packages that need to fetch arbitrary
+URLs discovered in crawled content (e.g. `packages/extractor` fetching logo/asset image bytes)
+can reuse this package's SSRF guard instead of re-implementing it.
+
 ## Fixtures
 
 `examples/fixtures/sites/basic/` is a small static site (served by a local `http` server, never

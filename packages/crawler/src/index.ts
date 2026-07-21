@@ -15,7 +15,14 @@ export * from "./schema.js";
 
 export { readCrawlArtifactFromDir, writeCrawlArtifactToDir } from "./serialize.js";
 
-export { SsrfError, UrlValidationError } from "./security/url-guard.js";
+export {
+  isPrivateOrReservedIp,
+  normalizeUrl,
+  resolveAndValidateHost,
+  SsrfError,
+  UrlValidationError,
+} from "./security/url-guard.js";
+export type { DnsLookup, ResolveAndValidateHostOptions } from "./security/url-guard.js";
 export type { CrawlLogEvent, CrawlLogger } from "./security/log.js";
 
 /** Package identity, used by tooling to confirm the package builds and is importable. */
