@@ -32,9 +32,13 @@ packages/exporters
   └─ packages/shared
 
 packages/crawler        (standalone — produces a crawl artifact, not Brand JSON)
-packages/extractor       (standalone in Phase 0; will depend on packages/shared once it
-                           emits partial Brand JSON in Phase 2)
-packages/vision          (standalone in Phase 0; same as extractor, from Phase 3)
+
+packages/extractor
+  ├─ packages/crawler   (its input type, CrawlArtifact, plus the reused SSRF-guarded fetch)
+  └─ packages/shared    (the Brand JSON sub-schemas it produces: colors, typography, logo, ...)
+
+packages/vision          (standalone in Phase 0; will depend on packages/crawler + shared the
+                           same way extractor does, from Phase 3)
 packages/editor          (standalone in Phase 0; will depend on packages/template-engine's
                            scene-graph output from Phase 7)
 packages/ui              (standalone — no Brand JSON dependency; pure component library)
@@ -75,6 +79,14 @@ URL ──▶ crawler ──▶ crawl artifact ──▶ extractor ──▶ par
 - **Phase 1** (`packages/crawler`): real. `crawlUrl(url, options)` drives Chromium behind an
   SSRF/redirect/size guard and returns a `CrawlArtifact` (its own Zod schema, `src/schema.ts` —
   not part of `packages/shared`, since it's an intermediate shape consumed only by
-  `packages/extractor`).
+  `packages/extractor`). Its SSRF-guard utilities (`normalizeUrl`, `resolveAndValidateHost`,
+  `isPrivateOrReservedIp`) are public exports, reused by other packages that fetch arbitrary
+  URLs found in crawled content instead of re-implementing SSRF protection.
+- **Phase 2** (`packages/extractor`): real. `extractAll(artifact, options)` turns a
+  `CrawlArtifact` into the Brand JSON pieces it can derive heuristically (colors, typography,
+  logo, spacing/radius/shadow/animation scales) plus its own `ClassifiedAsset[]`
+  (icon/illustration/photo — not a Brand JSON field; feeds `brand-engine`'s completeness
+  scoring in Phase 4 and gets refined by Vision AI in Phase 3). Tested against a real recorded
+  `CrawlArtifact` fixture (`examples/fixtures/crawl-artifacts/basic-site/`), never a live crawl.
 - Everything else still wires up to `packages/shared` as its real logic lands in later phases
   (see the per-package README for each package's target phase).

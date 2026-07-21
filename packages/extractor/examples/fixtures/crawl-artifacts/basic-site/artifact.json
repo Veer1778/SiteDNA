@@ -1,0 +1,217 @@
+{
+  "sourceUrl": "http://127.0.0.1:46221/",
+  "finalUrl": "http://127.0.0.1:46221/",
+  "redirectChain": ["http://127.0.0.1:46221/"],
+  "crawledAt": "2026-07-21T12:45:23.763Z",
+  "html": "<!DOCTYPE html><html lang=\"en\"><head>\n    <meta charset=\"utf-8\">\n    <title>Fixture Co.</title>\n    <meta name=\"description\" content=\"A fixture site used by the crawler's integration test.\">\n    <link rel=\"stylesheet\" href=\"/styles.css\">\n    <link rel=\"icon\" type=\"image/svg+xml\" href=\"/logo.svg\">\n    <link rel=\"apple-touch-icon\" href=\"/logo.svg\">\n    <style>\n      .inline-highlight {\n        color: #7e3af2;\n      }\n    </style>\n  </head>\n  <body>\n    <nav>\n      <img src=\"/logo.svg\" alt=\"Fixture Co. logo\" width=\"120\" height=\"40\">\n      <a href=\"/about\">About</a>\n    </nav>\n    <main>\n      <h1>Welcome to Fixture Co.</h1>\n      <p class=\"inline-highlight\">This page exists only to be crawled by tests.</p>\n      <button type=\"button\">Get started</button>\n      <input type=\"email\" placeholder=\"you@example.com\">\n    </main>\n  \n\n</body></html>",
+  "meta": {
+    "title": "Fixture Co.",
+    "description": "A fixture site used by the crawler's integration test."
+  },
+  "stylesheets": [
+    {
+      "href": "http://127.0.0.1:46221/styles.css",
+      "content": "@font-face {\n  font-family: \"FixtureSans\";\n  src: url(\"/fonts/fixture-sans.woff2\") format(\"woff2\");\n}\n\nhtml {\n  background: #ffffff;\n  color: #111827;\n  font-family: \"FixtureSans\", system-ui, sans-serif;\n}\n\nbody {\n  margin: 0;\n  padding: 24px;\n}\n\nnav {\n  display: flex;\n  align-items: center;\n  gap: 16px;\n}\n\nh1 {\n  font-size: 32px;\n  font-weight: 700;\n  line-height: 1.2;\n}\n\np {\n  font-size: 16px;\n  line-height: 1.5;\n}\n\na {\n  color: #1a56db;\n}\n\nbutton {\n  background: #1a56db;\n  color: #ffffff;\n  border: none;\n  border-radius: 8px;\n  padding: 8px 16px;\n  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);\n}\n\ninput {\n  border: 1px solid #e5e7eb;\n  border-radius: 4px;\n  padding: 8px 12px;\n}\n"
+    },
+    {
+      "href": null,
+      "content": "\n      .inline-highlight {\n        color: #7e3af2;\n      }\n    "
+    }
+  ],
+  "computedStyles": [
+    {
+      "selector": "html",
+      "styles": {
+        "color": "rgb(17, 24, 39)",
+        "backgroundColor": "rgb(255, 255, 255)",
+        "fontFamily": "FixtureSans, system-ui, sans-serif",
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "lineHeight": "normal",
+        "letterSpacing": "normal",
+        "borderRadius": "0px",
+        "boxShadow": "none",
+        "border": "0px none rgb(17, 24, 39)",
+        "borderColor": "rgb(17, 24, 39)",
+        "padding": "0px",
+        "margin": "0px"
+      }
+    },
+    {
+      "selector": "body",
+      "styles": {
+        "color": "rgb(17, 24, 39)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "FixtureSans, system-ui, sans-serif",
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "lineHeight": "normal",
+        "letterSpacing": "normal",
+        "borderRadius": "0px",
+        "boxShadow": "none",
+        "border": "0px none rgb(17, 24, 39)",
+        "borderColor": "rgb(17, 24, 39)",
+        "padding": "24px",
+        "margin": "0px"
+      }
+    },
+    {
+      "selector": "h1",
+      "styles": {
+        "color": "rgb(17, 24, 39)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "FixtureSans, system-ui, sans-serif",
+        "fontSize": "32px",
+        "fontWeight": "700",
+        "lineHeight": "38.4px",
+        "letterSpacing": "normal",
+        "borderRadius": "0px",
+        "boxShadow": "none",
+        "border": "0px none rgb(17, 24, 39)",
+        "borderColor": "rgb(17, 24, 39)",
+        "padding": "0px",
+        "margin": "21.44px 0px"
+      }
+    },
+    {
+      "selector": "h2",
+      "styles": null
+    },
+    {
+      "selector": "h3",
+      "styles": null
+    },
+    {
+      "selector": "h4",
+      "styles": null
+    },
+    {
+      "selector": "h5",
+      "styles": null
+    },
+    {
+      "selector": "h6",
+      "styles": null
+    },
+    {
+      "selector": "p",
+      "styles": {
+        "color": "rgb(126, 58, 242)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "FixtureSans, system-ui, sans-serif",
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "lineHeight": "24px",
+        "letterSpacing": "normal",
+        "borderRadius": "0px",
+        "boxShadow": "none",
+        "border": "0px none rgb(126, 58, 242)",
+        "borderColor": "rgb(126, 58, 242)",
+        "padding": "0px",
+        "margin": "16px 0px"
+      }
+    },
+    {
+      "selector": "a",
+      "styles": {
+        "color": "rgb(26, 86, 219)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "FixtureSans, system-ui, sans-serif",
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "lineHeight": "normal",
+        "letterSpacing": "normal",
+        "borderRadius": "0px",
+        "boxShadow": "none",
+        "border": "0px none rgb(26, 86, 219)",
+        "borderColor": "rgb(26, 86, 219)",
+        "padding": "0px",
+        "margin": "0px"
+      }
+    },
+    {
+      "selector": "button",
+      "styles": {
+        "color": "rgb(255, 255, 255)",
+        "backgroundColor": "rgb(26, 86, 219)",
+        "fontFamily": "Arial",
+        "fontSize": "13.3333px",
+        "fontWeight": "400",
+        "lineHeight": "normal",
+        "letterSpacing": "normal",
+        "borderRadius": "8px",
+        "boxShadow": "rgba(0, 0, 0, 0.1) 0px 1px 2px 0px",
+        "border": "0px none rgb(255, 255, 255)",
+        "borderColor": "rgb(255, 255, 255)",
+        "padding": "8px 16px",
+        "margin": "0px"
+      }
+    },
+    {
+      "selector": "input",
+      "styles": {
+        "color": "rgb(0, 0, 0)",
+        "backgroundColor": "rgb(255, 255, 255)",
+        "fontFamily": "Arial",
+        "fontSize": "13.3333px",
+        "fontWeight": "400",
+        "lineHeight": "normal",
+        "letterSpacing": "normal",
+        "borderRadius": "4px",
+        "boxShadow": "none",
+        "border": "1px solid rgb(229, 231, 235)",
+        "borderColor": "rgb(229, 231, 235)",
+        "padding": "8px 12px",
+        "margin": "0px"
+      }
+    },
+    {
+      "selector": "nav",
+      "styles": {
+        "color": "rgb(17, 24, 39)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "fontFamily": "FixtureSans, system-ui, sans-serif",
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "lineHeight": "normal",
+        "letterSpacing": "normal",
+        "borderRadius": "0px",
+        "boxShadow": "none",
+        "border": "0px none rgb(17, 24, 39)",
+        "borderColor": "rgb(17, 24, 39)",
+        "padding": "0px",
+        "margin": "0px"
+      }
+    }
+  ],
+  "assets": [
+    {
+      "url": "http://127.0.0.1:46221/logo.svg",
+      "kind": "image",
+      "contentType": "image/svg+xml",
+      "width": 120,
+      "height": 40
+    },
+    {
+      "url": "http://127.0.0.1:46221/fonts/fixture-sans.woff2",
+      "kind": "font",
+      "contentType": null,
+      "width": null,
+      "height": null
+    }
+  ],
+  "faviconCandidates": [
+    {
+      "url": "http://127.0.0.1:46221/logo.svg",
+      "rel": "icon",
+      "sizes": null
+    },
+    {
+      "url": "http://127.0.0.1:46221/logo.svg",
+      "rel": "apple-touch-icon",
+      "sizes": null
+    }
+  ],
+  "screenshotFullPage": "screenshot-full.png",
+  "screenshotViewport": "screenshot-viewport.png"
+}

@@ -4,7 +4,36 @@ All notable changes to this project are documented here, in [Keep a Changelog](h
 format. This project doesn't ship versioned releases yet (see [ROADMAP via Claude.md](./Claude.md)),
 so entries are grouped by phase rather than version number.
 
+## [Phase 2] — Extractors
+
+### Added
+
+- `packages/extractor`: `extractAll(artifact, options)` — turns a `CrawlArtifact` into
+  colors, typography, logo, spacing/radius/shadow/animation scales, and classified assets.
+- `src/colors.ts`: background/text from computed styles; primary/secondary/accent from the
+  screenshot's node-vibrant palette, deduped via culori's Euclidean color distance.
+- `src/typography.ts`: heading/body type scales from computed styles, with a documented
+  system-font fallback.
+- `src/logo.ts`: Cheerio-parsed `<img>`/`og:image`/favicon candidates, ranked heuristically;
+  light/dark slot approximated from candidate luminance via Sharp.
+- `src/tokens.ts`: spacing/radius/shadow/animation extraction from computed styles plus
+  PostCSS-parsed stylesheet declarations.
+- `src/assets.ts`: icon/illustration/photo classification via cheap signals first, then Sharp
+  color-complexity sampling for a capped set of raster assets.
+- Reused `packages/crawler`'s SSRF guard (now a public export) for extractor's own guarded
+  fetches instead of duplicating it.
+- Structured extraction-run logging via `onLog`, on every extractor function.
+- Real recorded-fixture tests (`examples/fixtures/crawl-artifacts/basic-site/`) plus
+  synthetic-artifact unit tests per module; end-to-end test validates every output against its
+  `@brandkit/shared` schema.
+
 ## [Phase 1] — Crawler
+
+### Fixed
+
+- Pinned `dependency-cruiser` to 17.4.3 (from 18.x, which requires Node ≥22) after the Phase 1
+  merge to `main` failed CI — CI runs Node 20 per `.nvmrc`; the bump had only been tested
+  locally on a newer Node version.
 
 ### Added
 
