@@ -4,6 +4,27 @@ All notable changes to this project are documented here, in [Keep a Changelog](h
 format. This project doesn't ship versioned releases yet (see [ROADMAP via Claude.md](./Claude.md)),
 so entries are grouped by phase rather than version number.
 
+## [Phase 3] — Vision AI
+
+### Added
+
+- `packages/vision`: `VisionProvider` interface with `AnthropicVisionProvider` as the concrete
+  implementation (model/API key configurable via env, no hardcoded keys) and
+  `FakeVisionProvider` for tests.
+- Classifies design language (multi-label, reusing `@brandkit/shared`'s
+  `StyleClassificationSchema`), voice, photography/illustration style, spacing density, and
+  animation style; produces (but does not apply) refinement suggestions for Phase 2's asset
+  classifications and logo ranking.
+- Structured-JSON-only prompts (`src/prompt.ts`), validated against
+  `VisionClassificationSchema` with one retry-on-invalid before throwing
+  `VisionResponseValidationError`.
+- Cost guard (`src/prepare-images.ts`): caps images per request (default 3) and downscales each
+  to a max dimension before sending.
+- `classifyFromCrawlArtifact(artifact, provider, options)` adapter feeding a `CrawlArtifact`'s
+  screenshots into the provider-agnostic interface.
+- Every test injects a fake Anthropic client or uses `FakeVisionProvider` — zero live API calls.
+- Structured classification-run logging via `onLog`, matching crawler/extractor.
+
 ## [Phase 2] — Extractors
 
 ### Added
