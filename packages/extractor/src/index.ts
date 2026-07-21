@@ -16,6 +16,7 @@ export { extractTokens, type Tokens } from "./tokens.js";
 export { classifyAssets } from "./assets.js";
 export * from "./schema.js";
 export type { ExtractLogEvent, ExtractLogger } from "./log.js";
+export { defaultFetchBytes } from "./security.js";
 export type { FetchBytes, FetchBytesOptions } from "./security.js";
 
 /**

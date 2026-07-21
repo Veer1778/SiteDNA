@@ -46,10 +46,10 @@ Each module is also exported individually (`extractColors`, `extractTypography`,
 ## Network access
 
 `logo.ts` and `assets.ts` fetch bytes the crawl didn't already download (candidate logo/favicon
-images, a capped sample of raster assets) via `defaultFetchBytes` (`src/security.ts`), which
-reuses `@brandkit/crawler`'s SSRF guard rather than duplicating it. Both modules take an
-injectable `fetchBytes` so callers (and this package's own tests) can avoid real network access
-entirely.
+images, a capped sample of raster assets) via `defaultFetchBytes` (`src/security.ts`, a public
+export), which reuses `@brandkit/crawler`'s SSRF guard rather than duplicating it. Both modules
+take an injectable `fetchBytes` so callers (and this package's own tests) can avoid real network
+access entirely.
 
 ## Logging
 
