@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 import { z } from "zod";
 
+import { FeatureList } from "../components/home/feature-list";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 
@@ -51,36 +52,43 @@ export default function HomePage() {
   }
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-2xl flex-col items-center justify-center gap-8 px-4">
-      <div className="text-center">
-        <h1 className="flex items-center justify-center gap-2 text-4xl font-semibold text-ink">
-          <Sparkles className="h-7 w-7 text-accent" aria-hidden="true" />
-          BrandKit AI
-        </h1>
-        <p className="mt-3 text-ink-muted">
+    <main className="mx-auto grid min-h-screen max-w-6xl grid-cols-1 items-center gap-12 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8">
+      <div className="flex flex-col gap-6">
+        <span className="inline-flex w-fit items-center gap-2 rounded-full bg-accent-soft px-3 py-1 text-xs font-medium text-accent-hover shadow-well">
+          <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+          AI-powered brand extraction
+        </span>
+
+        <h1 className="font-display text-5xl font-semibold text-ink sm:text-6xl">BrandKit AI</h1>
+
+        <p className="max-w-md text-lg text-ink-muted">
           Paste a public URL. We&apos;ll crawl it, extract its colors, typography, logo, and tokens,
-          and hand you a Brand Kit.
+          and hand you a Brand Kit — live, in your browser.
         </p>
+
+        <form onSubmit={onSubmit} className="flex w-full max-w-md flex-col gap-3 sm:flex-row">
+          <Input
+            type="url"
+            required
+            placeholder="https://example.com"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            aria-label="Website URL"
+          />
+          <Button type="submit" disabled={submitting}>
+            {submitting && <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />}
+            {submitting ? "Starting…" : "Analyze"}
+          </Button>
+        </form>
+
+        {error && (
+          <p role="alert" className="text-sm text-danger">
+            {error}
+          </p>
+        )}
       </div>
-      <form onSubmit={onSubmit} className="flex w-full flex-col gap-3 sm:flex-row">
-        <Input
-          type="url"
-          required
-          placeholder="https://example.com"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-          aria-label="Website URL"
-        />
-        <Button type="submit" disabled={submitting}>
-          {submitting && <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />}
-          {submitting ? "Starting…" : "Analyze"}
-        </Button>
-      </form>
-      {error && (
-        <p role="alert" className="text-sm text-danger">
-          {error}
-        </p>
-      )}
+
+      <FeatureList />
     </main>
   );
 }

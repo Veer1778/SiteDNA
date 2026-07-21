@@ -24,7 +24,7 @@ export function BrandKitViewer({ result }: { result: BrandKitResult }) {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="text-xl font-semibold text-ink">Brand Kit</h2>
+        <h2 className="font-display text-xl font-semibold text-ink">Brand Kit</h2>
         <Badge>{Math.round(completeness.score * 100)}% complete</Badge>
       </div>
 

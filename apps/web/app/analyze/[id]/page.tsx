@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { BrandKitViewer } from "../../../components/brand-kit/brand-kit-viewer";
+import { BackHomeLink } from "../../../components/ui/back-home-link";
 import { ProgressDial } from "../../../components/ui/progress-dial";
 import type { BrandResponse, JobStatus } from "../../../src/schema";
 
@@ -78,18 +79,20 @@ export default function AnalyzePage() {
 
   if (fetchError) {
     return (
-      <main className="mx-auto flex min-h-screen max-w-2xl items-center justify-center px-4">
+      <main className="mx-auto flex min-h-screen max-w-2xl flex-col items-center justify-center gap-6 px-4">
         <p role="alert" className="text-danger">
           {fetchError}
         </p>
+        <BackHomeLink />
       </main>
     );
   }
 
   if (!job) {
     return (
-      <main className="mx-auto flex min-h-screen max-w-2xl items-center justify-center px-4">
+      <main className="mx-auto flex min-h-screen max-w-2xl flex-col items-center justify-center gap-6 px-4">
         <p className="text-ink-muted">Loading…</p>
+        <BackHomeLink />
       </main>
     );
   }
@@ -118,6 +121,8 @@ export default function AnalyzePage() {
   if (!brandKit) {
     return (
       <main className="mx-auto flex min-h-screen max-w-2xl flex-col items-center gap-8 px-4 py-16">
+        <BackHomeLink className="self-start" />
+
         <ProgressDial
           percent={STEP_PERCENT[job.status]}
           label={STEP_LABEL[job.status]}
