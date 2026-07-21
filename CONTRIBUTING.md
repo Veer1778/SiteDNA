@@ -57,5 +57,6 @@ placeholder implementations or TODOs in core paths.
 - [ ] New/changed Brand JSON fields have JSDoc and are reflected in `docs/BRAND_JSON.md`
 - [ ] New packages have a README following the pattern in `packages/shared/README.md`
 - [ ] Commit messages follow Conventional Commits
+- [ ] `CHANGELOG.md` has an entry for this change
 - [ ] No scope creep beyond the phase/task at hand (flag anything out-of-scope you noticed
       instead of fixing it inline)
