@@ -15,6 +15,12 @@ import { Input } from "../components/ui/input";
 // still validates with the real `AnalyzeRequestSchema` — this is just a client-side UX check.
 const UrlInputSchema = z.object({ url: z.string().url() });
 
+/** Lets users type a bare domain ("spotify.com") instead of requiring "https://" up front. */
+function withScheme(input: string): string {
+  const trimmed = input.trim();
+  return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+}
+
 export default function HomePage() {
   const router = useRouter();
   const [url, setUrl] = useState("");
@@ -25,9 +31,9 @@ export default function HomePage() {
     event.preventDefault();
     setError(null);
 
-    const parsed = UrlInputSchema.safeParse({ url });
+    const parsed = UrlInputSchema.safeParse({ url: withScheme(url) });
     if (!parsed.success) {
-      setError("Enter a valid URL, including https://");
+      setError("Enter a valid URL or domain, e.g. spotify.com");
       return;
     }
 
@@ -68,9 +74,12 @@ export default function HomePage() {
 
         <form onSubmit={onSubmit} className="flex w-full max-w-md flex-col gap-3 sm:flex-row">
           <Input
-            type="url"
+            // Plain "text", not "url": the "url" input type enforces a scheme via the browser's
+            // own constraint validation before our onSubmit ever runs, which would block a bare
+            // domain like "spotify.com" from being submitted at all. We validate ourselves below.
+            type="text"
             required
-            placeholder="https://example.com"
+            placeholder="spotify.com or https://example.com"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             aria-label="Website URL"
