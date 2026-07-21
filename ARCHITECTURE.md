@@ -23,7 +23,10 @@ apps/web
   └─ packages/shared
 
 packages/brand-engine
-  └─ packages/shared
+  ├─ packages/crawler   (CrawlArtifact for sourceUrl/extractedAt)
+  ├─ packages/extractor (ExtractionResult — the merge pipeline's main input)
+  ├─ packages/vision    (VisionClassification — optional merge input)
+  └─ packages/shared    (BrandJsonSchema — what it assembles and validates against)
 
 packages/template-engine
   └─ packages/shared
@@ -98,5 +101,16 @@ URL ──▶ crawler ──▶ crawl artifact ──▶ extractor ──▶ par
   refinement _suggestions_ (vision-owned types — same non-Brand-JSON situation as Phase 2's
   `ClassifiedAsset`; `brand-engine` decides whether to apply them in Phase 4). Every test uses
   `FakeVisionProvider` or an injected fake Anthropic client — zero live API calls.
+- **Phase 4** (`packages/brand-engine`): real. `mergeBrandJson({ crawlArtifact, extraction,
+vision? })` is the deterministic (no I/O) merge pipeline — the first package depending on all
+  of crawler/extractor/vision/shared. Returns `BrandKitResult = { brandJson, completeness,
+refinedAssets, logoSuggestion }`: `brandJson` is the spec-mandated, schema-validated
+  deliverable; `completeness` is a fixed-checklist gap report (including the always-flagged
+  `components`, since no phase implements component detection yet); `refinedAssets` applies
+  vision's "override above a confidence threshold" rule to extractor's asset classifications;
+  `logoSuggestion` passes through vision's logo suggestion without applying it (materializing it
+  would need brand-engine to fetch bytes itself, breaking the "no I/O" pipeline). Tested against
+  a self-contained recorded fixture (golden-file test) plus a `fast-check` property test
+  asserting the output always validates against `BrandJsonSchema`.
 - Everything else still wires up to `packages/shared` as its real logic lands in later phases
   (see the per-package README for each package's target phase).

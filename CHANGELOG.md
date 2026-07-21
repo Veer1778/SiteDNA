@@ -4,6 +4,29 @@ All notable changes to this project are documented here, in [Keep a Changelog](h
 format. This project doesn't ship versioned releases yet (see [ROADMAP via Claude.md](./Claude.md)),
 so entries are grouped by phase rather than version number.
 
+## [Phase 4] — Brand Engine
+
+### Added
+
+- `packages/brand-engine`: `mergeBrandJson({ crawlArtifact, extraction, vision? })` — the
+  deterministic, no-I/O merge pipeline combining crawler/extractor/vision output into a
+  schema-validated `BrandJson`, the first package depending on all three producers.
+- `BrandKitResult = { brandJson, completeness, refinedAssets, logoSuggestion }`: `completeness`
+  is a fixed-checklist gap report (`src/completeness.ts`) including every `ColorRoles` role,
+  logo slots, non-empty scales, and an always-flagged `components` (no phase implements
+  detection yet); `refinedAssets` (`src/refine-assets.ts`) applies the spec's example
+  conflict-resolution rule — vision overrides an extractor asset classification above a
+  confidence threshold (default 0.7); `logoSuggestion` passes through vision's logo suggestion
+  without applying it.
+- Serialization + a migration stub (`src/serialize.ts`): `serializeBrandJson`/
+  `deserializeBrandJson`, and `migrateBrandJson` with an (currently empty) `MIGRATIONS` map —
+  there's only ever been one Brand JSON schema version so far.
+- Golden-file test against a self-contained recorded fixture set
+  (`examples/fixtures/basic-site/`) and a `fast-check` property test asserting the merged output
+  always validates against `BrandJsonSchema`.
+- `@brandkit/extractor` now also exports `defaultFetchBytes` (needed by brand-engine's fixture
+  recording script; previously only its type was public).
+
 ## [Phase 3] — Vision AI
 
 ### Added
