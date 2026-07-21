@@ -37,8 +37,10 @@ packages/extractor
   ├─ packages/crawler   (its input type, CrawlArtifact, plus the reused SSRF-guarded fetch)
   └─ packages/shared    (the Brand JSON sub-schemas it produces: colors, typography, logo, ...)
 
-packages/vision          (standalone in Phase 0; will depend on packages/crawler + shared the
-                           same way extractor does, from Phase 3)
+packages/vision
+  ├─ packages/crawler   (its input type, CrawlArtifact/screenshots, via classifyFromCrawlArtifact)
+  └─ packages/shared    (reuses StyleClassificationSchema, VoiceSchema, ConfidenceSchema, ...)
+
 packages/editor          (standalone in Phase 0; will depend on packages/template-engine's
                            scene-graph output from Phase 7)
 packages/ui              (standalone — no Brand JSON dependency; pure component library)
@@ -88,5 +90,13 @@ URL ──▶ crawler ──▶ crawl artifact ──▶ extractor ──▶ par
   (icon/illustration/photo — not a Brand JSON field; feeds `brand-engine`'s completeness
   scoring in Phase 4 and gets refined by Vision AI in Phase 3). Tested against a real recorded
   `CrawlArtifact` fixture (`examples/fixtures/crawl-artifacts/basic-site/`), never a live crawl.
+- **Phase 3** (`packages/vision`): real. `VisionProvider` is a provider-agnostic interface;
+  `AnthropicVisionProvider` is the concrete implementation (structured-JSON-only prompts,
+  validated against `VisionClassificationSchema` with one retry-on-invalid). Produces
+  `styleClassification`/`voice` (direct Brand JSON fields, reused from `packages/shared`) plus
+  `photographyStyle`/`illustrationStyle`/`spacingDensity`/`animationStyle` and asset/logo
+  refinement _suggestions_ (vision-owned types — same non-Brand-JSON situation as Phase 2's
+  `ClassifiedAsset`; `brand-engine` decides whether to apply them in Phase 4). Every test uses
+  `FakeVisionProvider` or an injected fake Anthropic client — zero live API calls.
 - Everything else still wires up to `packages/shared` as its real logic lands in later phases
   (see the per-package README for each package's target phase).

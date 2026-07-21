@@ -1,0 +1,21 @@
+{
+  "styleClassification": [
+    { "label": "modern", "score": 0.88 },
+    { "label": "stripe-like", "score": 0.74 },
+    { "label": "minimal", "score": 0.61 }
+  ],
+  "voice": ["confident", "technical", "friendly"],
+  "photographyStyle": ["candid", "high-contrast"],
+  "illustrationStyle": ["flat", "geometric"],
+  "spacingDensity": "comfortable",
+  "animationStyle": ["subtle", "minimal-motion"],
+  "assetRefinements": [
+    {
+      "url": "https://example.com/hero.jpg",
+      "suggestedClassification": "photo",
+      "confidence": 0.9,
+      "reason": "High-detail candid photography, not a flat graphic."
+    }
+  ],
+  "logoRefinement": null
+}
