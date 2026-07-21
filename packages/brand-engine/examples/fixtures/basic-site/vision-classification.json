@@ -1,0 +1,26 @@
+{
+  "styleClassification": [
+    {
+      "label": "modern",
+      "score": 0.82
+    },
+    {
+      "label": "minimal",
+      "score": 0.64
+    }
+  ],
+  "voice": ["confident", "friendly"],
+  "photographyStyle": [],
+  "illustrationStyle": ["flat", "geometric"],
+  "spacingDensity": "comfortable",
+  "animationStyle": ["subtle"],
+  "assetRefinements": [
+    {
+      "url": "http://127.0.0.1:42051/logo.svg",
+      "suggestedClassification": "illustration",
+      "confidence": 0.92,
+      "reason": "vision agrees with the heuristic classification"
+    }
+  ],
+  "logoRefinement": null
+}

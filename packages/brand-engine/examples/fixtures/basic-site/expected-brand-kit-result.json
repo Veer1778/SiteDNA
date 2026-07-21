@@ -1,0 +1,157 @@
+{
+  "brandJson": {
+    "schemaVersion": "1.0.0",
+    "sourceUrl": "http://127.0.0.1:42051/",
+    "extractedAt": "2026-07-21T13:40:13.897Z",
+    "logo": {
+      "light": {
+        "url": "http://127.0.0.1:42051/logo.svg",
+        "width": 120,
+        "height": 40,
+        "format": "svg"
+      },
+      "favicon": {
+        "url": "http://127.0.0.1:42051/logo.svg",
+        "width": 120,
+        "height": 40,
+        "format": "svg"
+      }
+    },
+    "colors": {
+      "primary": {
+        "hex": "#1a56db",
+        "confidence": 0.95
+      },
+      "secondary": {
+        "hex": "#1c54dc",
+        "confidence": 0.55
+      },
+      "accent": {
+        "hex": "#8192ba",
+        "confidence": 0.5
+      },
+      "background": {
+        "hex": "#ffffff",
+        "confidence": 0.95
+      },
+      "text": {
+        "hex": "#111827",
+        "confidence": 0.9
+      },
+      "border": {
+        "hex": "#e5e7eb",
+        "confidence": 0.7
+      }
+    },
+    "typography": {
+      "heading": {
+        "families": ["FixtureSans", "system-ui", "sans-serif"],
+        "weights": [700],
+        "sizes": [32],
+        "letterSpacing": [0],
+        "lineHeights": [1.2]
+      },
+      "body": {
+        "families": ["FixtureSans", "system-ui", "sans-serif"],
+        "weights": [400],
+        "sizes": [16],
+        "letterSpacing": [0],
+        "lineHeights": [1.2, 1.5]
+      }
+    },
+    "spacing": [0, 8, 12, 16, 21.44, 24],
+    "radius": [0, 4, 8],
+    "shadows": [
+      {
+        "offsetX": 0,
+        "offsetY": 1,
+        "blur": 2,
+        "spread": 0,
+        "color": "#000000",
+        "inset": false
+      },
+      {
+        "offsetX": 1,
+        "offsetY": 2,
+        "blur": 0,
+        "spread": 0,
+        "color": "#000000",
+        "inset": false
+      }
+    ],
+    "animations": {
+      "durations": [],
+      "easings": []
+    },
+    "components": [],
+    "voice": ["confident", "friendly"],
+    "styleClassification": [
+      {
+        "label": "modern",
+        "score": 0.82
+      },
+      {
+        "label": "minimal",
+        "score": 0.64
+      }
+    ]
+  },
+  "completeness": {
+    "score": 0.6,
+    "gaps": [
+      {
+        "field": "colors.secondary",
+        "severity": "low-confidence",
+        "message": "secondary color detected with low confidence (0.55)"
+      },
+      {
+        "field": "colors.accent",
+        "severity": "low-confidence",
+        "message": "accent color detected with low confidence (0.5)"
+      },
+      {
+        "field": "colors.surface",
+        "severity": "missing",
+        "message": "no surface color detected"
+      },
+      {
+        "field": "colors.success",
+        "severity": "missing",
+        "message": "no success color detected"
+      },
+      {
+        "field": "colors.warning",
+        "severity": "missing",
+        "message": "no warning color detected"
+      },
+      {
+        "field": "colors.danger",
+        "severity": "missing",
+        "message": "no danger color detected"
+      },
+      {
+        "field": "logo.dark",
+        "severity": "missing",
+        "message": "no dark logo detected"
+      },
+      {
+        "field": "animations",
+        "severity": "missing",
+        "message": "no animation durations/easings detected"
+      },
+      {
+        "field": "components",
+        "severity": "missing",
+        "message": "component detection is not implemented in any phase yet"
+      }
+    ]
+  },
+  "refinedAssets": [
+    {
+      "url": "http://127.0.0.1:42051/logo.svg",
+      "classification": "illustration",
+      "reason": "svg-default"
+    }
+  ],
+  "logoSuggestion": null
+}

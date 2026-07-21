@@ -5,5 +5,10 @@
     "rootDir": "src"
   },
   "include": ["src"],
-  "references": [{ "path": "../shared" }]
+  "references": [
+    { "path": "../crawler" },
+    { "path": "../extractor" },
+    { "path": "../shared" },
+    { "path": "../vision" }
+  ]
 }

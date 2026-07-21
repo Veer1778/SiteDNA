@@ -16,12 +16,19 @@
   "scripts": {
     "build": "tsc -b",
     "test": "vitest run",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "record-fixture": "tsx scripts/record-fixture.ts"
   },
   "dependencies": {
-    "@brandkit/shared": "workspace:*"
+    "@brandkit/crawler": "workspace:*",
+    "@brandkit/extractor": "workspace:*",
+    "@brandkit/shared": "workspace:*",
+    "@brandkit/vision": "workspace:*",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
+    "fast-check": "^3.23.2",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "vitest": "^2.1.8"
   }
