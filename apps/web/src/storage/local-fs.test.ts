@@ -72,6 +72,38 @@ describe("LocalFsJobStore", () => {
     const final = await store.get("job-1");
     expect(final?.logs).toHaveLength(20);
   });
+
+  it("never lets a concurrent get() observe a torn write (writes are temp-file + rename)", async () => {
+    const store = new LocalFsJobStore(dir);
+    await store.create(makeJob({ logs: [] }));
+
+    const bigMessage = "x".repeat(50_000); // large enough that a plain truncate+write is observable mid-flight
+    const writes = Promise.all(
+      Array.from({ length: 30 }, (_, i) =>
+        store.update("job-1", (job) => ({
+          ...job,
+          logs: [
+            ...job.logs,
+            {
+              level: "info",
+              step: "x",
+              message: `${bigMessage}-${i}`,
+              timestamp: new Date().toISOString(),
+            },
+          ],
+        })),
+      ),
+    );
+
+    // Reads racing the writes above must always either fully succeed or return the prior
+    // complete job — never throw from parsing a partially-written file.
+    const reads: Array<Promise<unknown>> = [];
+    for (let i = 0; i < 30; i++) {
+      reads.push(store.get("job-1"));
+    }
+
+    await expect(Promise.all([writes, ...reads])).resolves.toBeDefined();
+  });
 });
 
 describe("LocalFsAssetStore", () => {

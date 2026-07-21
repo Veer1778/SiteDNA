@@ -37,6 +37,17 @@ function extractLengthTokens(value: string | undefined): number[] {
     .filter((n): n is number => n !== null);
 }
 
+/**
+ * Same as {@link extractLengthTokens}, but drops negative values — for the `spacing` scale
+ * specifically, since `SpacingScaleSchema` requires non-negative numbers. Negative margins are a
+ * common, valid CSS technique (pulling elements to overlap), but they represent overlap, not a
+ * spacing value, so dropping them (rather than taking their absolute value, which would wrongly
+ * conflate a 24px gap with a -24px overlap) is the more accurate read of "spacing in use".
+ */
+function extractSpacingTokens(value: string | undefined): number[] {
+  return extractLengthTokens(value).filter((n) => n >= 0);
+}
+
 function parseOneShadow(segment: string): Shadow | null {
   let working = segment.trim();
   let inset = false;
@@ -113,8 +124,8 @@ export function extractTokens(
 
   for (const entry of artifact.computedStyles) {
     if (!entry.styles) continue;
-    spacingValues.push(...extractLengthTokens(entry.styles.padding));
-    spacingValues.push(...extractLengthTokens(entry.styles.margin));
+    spacingValues.push(...extractSpacingTokens(entry.styles.padding));
+    spacingValues.push(...extractSpacingTokens(entry.styles.margin));
     radiusValues.push(...extractLengthTokens(entry.styles.borderRadius.split("/")[0]));
     shadows.push(...parseShadowValue(entry.styles.boxShadow));
   }
@@ -136,7 +147,7 @@ export function extractTokens(
     root.walkDecls((decl) => {
       const prop = decl.prop.toLowerCase();
       if (SPACING_PROPS.has(prop)) {
-        spacingValues.push(...extractLengthTokens(decl.value));
+        spacingValues.push(...extractSpacingTokens(decl.value));
       } else if (prop === "border-radius" || prop.endsWith("-radius")) {
         radiusValues.push(...extractLengthTokens(decl.value.split("/")[0]));
       } else if (prop === "box-shadow") {
@@ -144,15 +155,19 @@ export function extractTokens(
       } else if (prop === "transition-duration" || prop === "animation-duration") {
         for (const token of splitTopLevel(decl.value)) {
           const ms = parseDurationMs(token);
-          if (ms !== null) durations.push(ms);
+          if (ms !== null && ms >= 0) durations.push(ms);
         }
       } else if (prop === "transition-timing-function" || prop === "animation-timing-function") {
         for (const part of splitTopLevel(decl.value)) easings.add(part.trim());
       } else if (prop === "transition" || prop === "animation") {
+        // The shorthand is `<property> <duration> <timing-function> <delay>` — every
+        // time-like token gets parsed here, but `delay` is legitimately negative (starts the
+        // transition partway through), while `AnimationsSchema.durations` requires non-negative
+        // values. Drop negative tokens rather than mislabeling a delay as a duration.
         for (const part of splitTopLevel(decl.value)) {
           for (const token of part.split(/\s+/)) {
             const ms = parseDurationMs(token);
-            if (ms !== null) durations.push(ms);
+            if (ms !== null && ms >= 0) durations.push(ms);
           }
           const easingMatch = EASING_PATTERN.exec(part);
           if (easingMatch) easings.add(easingMatch[0]);

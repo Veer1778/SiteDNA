@@ -21,6 +21,12 @@ export const DEFAULT_MAX_REDIRECTS = 5;
 export const DEFAULT_MAX_RESPONSE_BYTES = 25 * 1024 * 1024;
 /** Cap on how many discovered assets get a HEAD request for content-type, to bound crawl time. */
 const MAX_ASSET_HEAD_REQUESTS = 50;
+/**
+ * How long to give a page an extra chance to settle after the `load` event, before proceeding
+ * regardless. Best-effort only — see the comment at the `waitForLoadState` call below for why
+ * this can't be the primary navigation wait condition.
+ */
+const NETWORK_IDLE_GRACE_MS = 5_000;
 
 export class CrawlTimeoutError extends Error {}
 export class RobotsDisallowedError extends Error {}
@@ -312,13 +318,30 @@ export async function crawlUrl(input: string, options: CrawlOptions = {}): Promi
       );
 
       log({ level: "info", step: "navigate", message: url.toString() });
+      // `waitUntil: "networkidle"` is unreliable on real-world sites: ad networks, analytics
+      // beacons, and chat widgets keep issuing background requests indefinitely, so the page
+      // never goes idle and navigation times out on otherwise-fine pages. `"load"` (all
+      // initial-HTML resources — stylesheets, images, fonts — finished) is what extraction
+      // actually needs and isn't disrupted by ongoing background traffic.
       const response = await page.goto(url.toString(), {
-        waitUntil: "networkidle",
+        waitUntil: "load",
         timeout: navigationTimeoutMs,
       });
       if (!response) {
         throw new Error(`navigation to ${url.toString()} produced no response`);
       }
+
+      // Best-effort only: give the page a short additional window to settle (lazy-loaded
+      // content, late style recalculation) if it happens to go network-idle on its own. Never
+      // fatal — a page that keeps chattering (ads, analytics) just proceeds with what "load"
+      // already captured, rather than failing the whole crawl.
+      await page.waitForLoadState("networkidle", { timeout: NETWORK_IDLE_GRACE_MS }).catch(() => {
+        log({
+          level: "info",
+          step: "network-idle-grace",
+          message: "page did not go network-idle within the grace window; proceeding anyway",
+        });
+      });
 
       const redirectChain: string[] = [];
       let currentRequest = response.request();

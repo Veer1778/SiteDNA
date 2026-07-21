@@ -27,6 +27,9 @@ const STEP_LABEL: Record<JobStatus, string> = {
 };
 
 const POLL_INTERVAL_MS = 1500;
+// A single failed poll (a dropped connection, a transient 500) shouldn't end the flow for a job
+// that's still running fine — only give up after several polls in a row fail.
+const MAX_CONSECUTIVE_POLL_FAILURES = 5;
 
 export default function AnalyzePage() {
   const params = useParams<{ id: string }>();
@@ -36,22 +39,32 @@ export default function AnalyzePage() {
   useEffect(() => {
     let cancelled = false;
     let timer: ReturnType<typeof setTimeout> | undefined;
+    let consecutiveFailures = 0;
 
     async function poll() {
       try {
         const res = await fetch(`/api/brand/${params.id}`);
-        if (!res.ok) {
+        if (res.status === 404) {
           if (!cancelled) setFetchError("Job not found.");
           return;
         }
+        if (!res.ok) throw new Error(`unexpected status ${res.status}`);
+
         const body = (await res.json()) as BrandResponse;
         if (cancelled) return;
+        consecutiveFailures = 0;
         setJob(body);
         if (body.status !== "done" && body.status !== "failed") {
           timer = setTimeout(poll, POLL_INTERVAL_MS);
         }
       } catch {
-        if (!cancelled) setFetchError("Network error while checking progress.");
+        if (cancelled) return;
+        consecutiveFailures += 1;
+        if (consecutiveFailures >= MAX_CONSECUTIVE_POLL_FAILURES) {
+          setFetchError("Lost connection while checking progress.");
+          return;
+        }
+        timer = setTimeout(poll, POLL_INTERVAL_MS);
       }
     }
 

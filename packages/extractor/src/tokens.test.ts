@@ -33,6 +33,20 @@ describe("extractTokens", () => {
     expect(radius).toEqual([4, 8]);
   });
 
+  it("drops negative margins from the spacing scale (SpacingScaleSchema requires non-negative)", () => {
+    const artifact = makeArtifact({
+      computedStyles: [
+        {
+          selector: ".overlap",
+          styles: { ...BLANK_COMPUTED_STYLE, padding: "8px", margin: "-24px" },
+        },
+      ],
+    });
+
+    const { spacing } = extractTokens(artifact);
+    expect(spacing).toEqual([8]);
+  });
+
   it("parses box-shadow from computed styles and dedupes identical shadows", () => {
     const artifact = makeArtifact({
       computedStyles: [
@@ -85,6 +99,20 @@ describe("extractTokens", () => {
     const { animations } = extractTokens(artifact);
     expect(animations.durations).toEqual(expect.arrayContaining([200, 300]));
     expect(animations.easings).toEqual(expect.arrayContaining(["ease-in-out", "linear"]));
+  });
+
+  it("drops a negative delay token from the transition shorthand out of durations (AnimationsSchema requires non-negative)", () => {
+    const artifact = makeArtifact({
+      stylesheets: [
+        {
+          href: null,
+          content: `.reveal { transition: opacity 300ms ease -100ms; }`,
+        },
+      ],
+    });
+
+    const { animations } = extractTokens(artifact);
+    expect(animations.durations).toEqual([300]);
   });
 
   it("skips unparseable stylesheets without throwing, and logs a warning", () => {

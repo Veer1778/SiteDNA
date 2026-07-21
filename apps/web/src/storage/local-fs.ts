@@ -1,8 +1,22 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { randomUUID } from "node:crypto";
+import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
 import type { Job } from "../schema";
 import type { AssetStore, JobStore } from "./types";
+
+/**
+ * Writes via a temp file + rename instead of writing `path` directly. Plain `writeFile` truncates
+ * the destination before streaming the new content, so a concurrent reader (e.g. a `GET
+ * /brand/:id` poll landing mid-write) can observe a partially-written/empty file and fail to
+ * parse it. `rename` within the same directory is atomic on POSIX filesystems — readers always
+ * see either the complete old content or the complete new content, never a torn write.
+ */
+async function atomicWriteFile(path: string, data: string | Buffer): Promise<void> {
+  const tmpPath = `${path}.tmp-${randomUUID()}`;
+  await writeFile(tmpPath, data);
+  await rename(tmpPath, path);
+}
 
 /**
  * Serializes concurrent operations on the same key through an in-memory promise chain — enough
@@ -44,7 +58,7 @@ export class LocalFsJobStore implements JobStore {
 
   async create(job: Job): Promise<void> {
     await mkdir(this.dir, { recursive: true });
-    await writeFile(this.pathFor(job.id), JSON.stringify(job, null, 2));
+    await atomicWriteFile(this.pathFor(job.id), JSON.stringify(job, null, 2));
   }
 
   async get(id: string): Promise<Job | null> {
@@ -61,7 +75,7 @@ export class LocalFsJobStore implements JobStore {
       const current = await this.get(id);
       if (!current) throw new Error(`job ${id} not found`);
       const next = updater(current);
-      await writeFile(this.pathFor(id), JSON.stringify(next, null, 2));
+      await atomicWriteFile(this.pathFor(id), JSON.stringify(next, null, 2));
       return next;
     });
   }
@@ -80,8 +94,8 @@ export class LocalFsAssetStore implements AssetStore {
 
   async put(key: string, bytes: Buffer, contentType: string): Promise<void> {
     await mkdir(this.dir, { recursive: true });
-    await writeFile(this.pathFor(key), bytes);
-    await writeFile(`${this.pathFor(key)}.meta.json`, JSON.stringify({ contentType }));
+    await atomicWriteFile(this.pathFor(key), bytes);
+    await atomicWriteFile(`${this.pathFor(key)}.meta.json`, JSON.stringify({ contentType }));
   }
 
   async get(key: string): Promise<{ bytes: Buffer; contentType: string } | null> {

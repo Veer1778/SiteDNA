@@ -20,6 +20,25 @@ function nowIso(): string {
   return new Date().toISOString();
 }
 
+// Real-world crawls need more slack than the crawler's own test suite (against a trivial local
+// fixture) does: some sites are just slow to load in the first place (large asset graphs, slow
+// origins), and a full-page screenshot of a very long marketing page can itself take a while
+// once navigation has already succeeded. The web app widens the ceiling for real-world crawls;
+// this doesn't change what "done" means, only how long a slow-but-working crawl gets before the
+// job is given up on.
+const WEB_NAVIGATION_TIMEOUT_MS = 45_000;
+const WEB_TOTAL_TIMEOUT_MS = 75_000;
+
+// Playwright error messages (e.g. TimeoutError) embed ANSI color codes in their "Call log"
+// section unconditionally, regardless of TTY — left as-is they render as garbled escape
+// sequences in the web UI. Strip them at this presentation boundary rather than teaching every
+// consumer of `Job.logs`/`Job.error` to do it.
+// eslint-disable-next-line no-control-regex -- deliberately matching ANSI CSI escape sequences
+const ANSI_ESCAPE_PATTERN = /\x1b\[[0-9;]*m/g;
+function sanitizeErrorMessage(message: string): string {
+  return message.replace(ANSI_ESCAPE_PATTERN, "").trim();
+}
+
 /**
  * Runs the full pipeline for `job.id`/`job.url` in the background (not awaited by the caller —
  * `POST /analyze` returns as soon as the job is created). Every pipeline package's `onLog` is
@@ -32,10 +51,11 @@ export async function runJob(job: Job, deps: RunJobDeps): Promise<void> {
   const visionEnabled = deps.visionEnabled ?? Boolean(process.env.ANTHROPIC_API_KEY);
 
   const appendLog = async (entry: Omit<LogEntry, "timestamp">) => {
-    consoleLogger(entry);
+    const sanitized = { ...entry, message: sanitizeErrorMessage(entry.message) };
+    consoleLogger(sanitized);
     await jobStore.update(job.id, (current) => ({
       ...current,
-      logs: [...current.logs, { ...entry, timestamp: nowIso() }],
+      logs: [...current.logs, { ...sanitized, timestamp: nowIso() }],
       updatedAt: nowIso(),
     }));
   };
@@ -55,7 +75,11 @@ export async function runJob(job: Job, deps: RunJobDeps): Promise<void> {
 
   try {
     await setStatus("crawling");
-    const crawlOptions: Parameters<typeof crawlUrl>[1] = { onLog };
+    const crawlOptions: Parameters<typeof crawlUrl>[1] = {
+      onLog,
+      navigationTimeoutMs: WEB_NAVIGATION_TIMEOUT_MS,
+      totalTimeoutMs: WEB_TOTAL_TIMEOUT_MS,
+    };
     if (deps.allowPrivateNetwork !== undefined)
       crawlOptions.allowPrivateNetwork = deps.allowPrivateNetwork;
     const crawlArtifact = await crawlUrl(job.url, crawlOptions);
@@ -99,7 +123,7 @@ export async function runJob(job: Job, deps: RunJobDeps): Promise<void> {
       updatedAt: nowIso(),
     }));
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
+    const message = sanitizeErrorMessage(error instanceof Error ? error.message : String(error));
     await appendLog({ level: "error", step: "job-failed", message });
     await jobStore.update(job.id, (current) => ({
       ...current,

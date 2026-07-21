@@ -4,6 +4,41 @@ All notable changes to this project are documented here, in [Keep a Changelog](h
 format. This project doesn't ship versioned releases yet (see [ROADMAP via Claude.md](./Claude.md)),
 so entries are grouped by phase rather than version number.
 
+## [Post-5b] — Real-world crawl hardening
+
+Found by manually testing the deployed Phase 5b UI against real sites (not fixtures) — a mix
+of ad-heavy/complex sites and a spread from `stripe.com` down to `example.com`.
+
+### Fixed
+
+- **`packages/crawler`**: navigation used `waitUntil: "networkidle"`, which real sites with
+  continuous ad/analytics/tracker traffic (news sites, e-commerce) never reach, timing out
+  otherwise-fine crawls. Switched to `waitUntil: "load"` plus a short (5s) best-effort
+  network-idle grace window that never blocks the crawl if the page keeps chattering.
+- **`packages/extractor`**: two schema-validation crashes from real-world CSS that the fixture
+  site never exercised, both the same root cause — a magnitude-only scale (`spacing`,
+  `animations.durations`) ingesting a value that's legitimately negative in a different sense:
+  - Negative CSS margins (a common overlap technique) were feeding the `spacing` scale, which
+    `SpacingScaleSchema` requires non-negative. Now dropped rather than misread as spacing.
+  - The `transition`/`animation` shorthand's `delay` token (legitimately negative — starts a
+    transition partway through) was being parsed as a `duration`, which
+    `AnimationsSchema.durations` requires non-negative. Now dropped rather than misread as a
+    duration.
+- **`apps/web`**: three issues surfaced only under real usage:
+  - Playwright error messages embed raw ANSI escape codes unconditionally; they were leaking
+    into the UI's error/log text as garbled characters. Now sanitized at the point every log
+    entry and job error enters the app.
+  - `LocalFsJobStore`'s writes weren't atomic (`writeFile` truncates before writing new
+    content), so a `GET /brand/:id` poll landing mid-write could read a torn/empty file and
+    fail to parse it — surfacing to users as a false "Job not found." Fixed via temp-file +
+    atomic rename, with a concurrency regression test.
+  - The live-progress page treated any single failed poll as fatal, ending the flow even for a
+    job that was still running fine. Now only a definitive 404 stops polling; other failures
+    retry (capped) before giving up.
+  - Widened the web app's own crawl timeout budget (45s nav / 75s total) — real pages are
+    sometimes just slower to load, and a full-page screenshot of a very long page can itself
+    take a while once navigation has already succeeded.
+
 ## [Phase 5b] — Web UI
 
 ### Added
