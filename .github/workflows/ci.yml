@@ -24,6 +24,11 @@ jobs:
       - name: Install dependencies (frozen lockfile — gate against unreviewed lockfile drift)
         run: pnpm install --frozen-lockfile
 
+      # packages/crawler drives real Chromium via Playwright; its integration test needs the
+      # browser binary present, which pnpm install alone does not fetch.
+      - name: Install Playwright Chromium
+        run: pnpm --filter @brandkit/crawler exec playwright install --with-deps chromium
+
       - name: Build all packages (also type-checks, via tsc -b)
         run: pnpm build
 
