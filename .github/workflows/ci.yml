@@ -25,7 +25,8 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       # packages/crawler drives real Chromium via Playwright; its integration test needs the
-      # browser binary present, which pnpm install alone does not fetch.
+      # browser binary present, which pnpm install alone does not fetch. apps/web's Playwright
+      # E2E suite uses the same browser via @playwright/test.
       - name: Install Playwright Chromium
         run: pnpm --filter @brandkit/crawler exec playwright install --with-deps chromium
 
@@ -43,3 +44,9 @@ jobs:
 
       - name: Check formatting
         run: pnpm format:check
+
+      # The literal Phase 5 acceptance criterion: a real browser drives a real `next dev` server
+      # through submit -> progress -> rendered Brand Kit, against the crawler's local fixture
+      # site — never a live site.
+      - name: Run E2E tests
+        run: pnpm test:e2e
