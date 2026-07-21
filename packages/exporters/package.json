@@ -1,0 +1,28 @@
+{
+  "name": "@brandkit/exporters",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Exports Brand JSON and scene graphs to PNG, SVG, PDF, PSD, and developer token formats (CSS/SCSS/Tailwind/Style Dictionary).",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "test": "vitest run",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@brandkit/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}
