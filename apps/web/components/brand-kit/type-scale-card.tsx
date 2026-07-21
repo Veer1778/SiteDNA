@@ -40,7 +40,7 @@ export function TypeScaleCard({ typography }: { typography: BrandJson["typograph
   return (
     <Card>
       <CardTitle>Typography</CardTitle>
-      <div className="mt-4 flex flex-col gap-3">
+      <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
         <ScaleRow label="Heading" roleScale={typography.heading} />
         <ScaleRow label="Body" roleScale={typography.body} />
       </div>

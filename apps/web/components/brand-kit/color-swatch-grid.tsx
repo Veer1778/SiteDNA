@@ -32,7 +32,7 @@ export function ColorSwatchGrid({ colors }: { colors: BrandJson["colors"] }) {
   return (
     <Card>
       <CardTitle>Colors</CardTitle>
-      <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+      <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
         {entries.map(({ role, value }) => (
           <div key={role} className="flex flex-col gap-2 rounded-xl bg-paper-well p-3 shadow-well">
             <div
@@ -41,8 +41,13 @@ export function ColorSwatchGrid({ colors }: { colors: BrandJson["colors"] }) {
               aria-hidden="true"
             />
             <div className="text-xs">
-              <div className="font-medium text-ink">{ROLE_LABELS[role]}</div>
-              <div className="text-ink-muted">{value?.hex}</div>
+              <div className="flex items-center justify-between gap-2">
+                <span className="font-medium text-ink">{ROLE_LABELS[role]}</span>
+                <span className="text-ink-muted">
+                  {value ? `${Math.round(value.confidence * 100)}%` : null}
+                </span>
+              </div>
+              <div className="font-mono text-ink-muted">{value?.hex}</div>
             </div>
           </div>
         ))}
