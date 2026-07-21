@@ -18,7 +18,7 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["src", "app", "next-env.d.ts", ".next/types/**/*.ts"],
+  "include": ["src", "app", "components", "lib", "next-env.d.ts", ".next/types/**/*.ts"],
   "exclude": ["node_modules", ".next"],
   "references": [
     { "path": "../../packages/brand-engine" },

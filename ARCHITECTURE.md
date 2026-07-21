@@ -122,8 +122,18 @@ extracting → analyzing (if configured) → done`/`failed`, no real job queue);
   — same spirit as Phase 3's vision provider split. OpenAPI is generated with
   `@asteasolutions/zod-to-openapi` (zod v3), not `@hono/zod-openapi` (zod v4 — would fork the
   whole monorepo's zod version). This is also where every pipeline package's `onLog` finally
-  gets consumed for real: server console plus each job's persisted `logs`. Phase 5b (the web UI,
-  Light Mode Skeumorphism per project direction — not the spec's original dark-mode bullet)
-  follows as a separate branch/merge.
+  gets consumed for real: server console plus each job's persisted `logs`.
+- **Phase 5b** (`apps/web`, web UI half): real. Light Mode Skeumorphism per project direction —
+  not the spec's original dark-mode bullet; no dark mode, no theme toggle. Tailwind v4 theme
+  tokens (`app/globals.css`, CSS-based `@theme` — no `tailwind.config.ts`) define a warm/paper
+  palette and an inset/outset shadow scale for tactile depth; `components/ui/*` are hand-built
+  shadcn/ui-style primitives on top of those tokens, `components/brand-kit/*` render `BrandJson`
+  slices (colors, typography, logo, spacing/radius/shadow scales, and an honest empty state for
+  `components`, since no phase implements detection). `app/page.tsx` (URL input) and
+  `app/analyze/[id]/page.tsx` (polls `GET /brand/:id`, renders the live `logs` stream via a
+  `ProgressDial`, swaps in the Brand Kit viewer once done) are the two pages. Framer Motion
+  drives the log stream's fade-in. `e2e/analyze.spec.ts` (Playwright) is the spec's literal
+  acceptance criterion — a real browser drives a real `next dev` server against the crawler's
+  local fixture site end to end.
 - Everything else still wires up to `packages/shared` as its real logic lands in later phases
   (see the per-package README for each package's target phase).

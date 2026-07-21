@@ -12,3 +12,6 @@ coverage/
 .next/
 tmp/
 .data/
+test-results/
+playwright-report/
+blob-report/

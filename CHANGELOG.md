@@ -4,6 +4,37 @@ All notable changes to this project are documented here, in [Keep a Changelog](h
 format. This project doesn't ship versioned releases yet (see [ROADMAP via Claude.md](./Claude.md)),
 so entries are grouped by phase rather than version number.
 
+## [Phase 5b] — Web UI
+
+### Added
+
+- Light Mode Skeumorphism UI, per project direction (see Phase 5a's "Style direction" entry
+  below): a warm/paper Tailwind v4 theme (`app/globals.css`, CSS-based `@theme` — no
+  `tailwind.config.ts`) with an inset/outset shadow scale (`--shadow-raised`, `--shadow-pressed`,
+  `--shadow-well`) for tactile depth. No dark mode, no theme toggle.
+- `components/ui/*`: hand-built shadcn/ui-style primitives (Button, Input, Card, Badge,
+  `ProgressDial` — a circular gauge, not a flat bar) on top of the theme tokens, via
+  `class-variance-authority` and `lib/utils.ts`'s `cn()`.
+- `components/brand-kit/*`: `ColorSwatchGrid`, `TypeScaleCard`, `LogoPreview`, `TokenScaleRow`,
+  `ComponentsEmptyState` — pure presentational components rendering `BrandJson` slices;
+  `ComponentsEmptyState` renders an honest empty state, since component detection isn't
+  implemented in any phase.
+- `app/page.tsx`: landing page + URL input, validated client-side with a local Zod schema kept
+  deliberately separate from `src/schema.ts` (which transitively imports the crawler/Playwright
+  chain and must never reach the browser bundle).
+- `app/analyze/[id]/page.tsx`: polls `GET /brand/:id` every 1.5s, renders the job's live `logs`
+  stream (Framer Motion fade-in) and a `ProgressDial` while in progress, swaps in the Brand Kit
+  viewer once `status === "done"`, shows the job's `error` on `status === "failed"`.
+- `:focus-visible` styling renders every interactive control as visibly pressed/lit — part of
+  the skeuomorphic language, not a bolted-on outline; verified with keyboard-only navigation.
+- `e2e/analyze.spec.ts` (Playwright, first in the repo) — the spec's literal acceptance
+  criterion: a real Chromium browser drives a real `next dev` server against
+  `packages/crawler`'s local fixture site end to end. `E2E_ALLOW_PRIVATE_NETWORK=1`
+  (`playwright.config.ts`'s `webServer.env` only) lets the route handler crawl the fixture
+  server's loopback address for this run.
+- Root `package.json`/`turbo.json`: `pnpm test:e2e` (`turbo run test:e2e`), per `Claude.md`'s
+  already-documented verification command.
+
 ## [Phase 5a] — API
 
 ### Added
