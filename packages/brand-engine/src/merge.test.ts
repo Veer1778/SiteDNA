@@ -30,7 +30,7 @@ describe("mergeBrandJson (golden file, recorded fixture)", () => {
     expect(JSON.parse(JSON.stringify(result))).toEqual(expected);
   });
 
-  it("scores the recorded fixture's completeness below 1 (missing components/success/warning/danger)", async () => {
+  it("scores the recorded fixture's completeness below 1 (missing components, at least)", async () => {
     const crawlArtifact = await readCrawlArtifactFromDir(`${fixtureDir}crawl-artifact`);
     const extraction = await readJson<ExtractionResult>("extraction.json");
     const vision = await readJson<VisionClassification>("vision-classification.json");

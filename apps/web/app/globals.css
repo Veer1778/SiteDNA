@@ -1,10 +1,11 @@
 @import "tailwindcss";
 
 /*
- * BrandKit AI's own UI theme: a clean black-and-white palette with soft, minimal shadows and a
- * system-font-first type stack — the "Apple product page" look (flat cards, generous whitespace
- * and radius, one type family carrying hierarchy through weight, not a second display face).
- * Unrelated to any BrandJson a user analyzes. No dark mode / no theme toggle by design.
+ * BrandKit AI's own UI theme: a black-and-white "Apple product page" palette, but with the
+ * tactile depth turned up rather than a fully flat treatment — layered ambient + contact shadows
+ * plus a faint inset top highlight (a glossy "raised surface" cue) on cards/buttons, and a real
+ * gradient on the primary black pill button. Unrelated to any BrandJson a user analyzes. No dark
+ * mode / no theme toggle by design.
  */
 @theme {
   --color-paper: #ffffff;
@@ -19,10 +20,17 @@
   --color-danger: #ff3b30;
   --color-success: #34c759;
 
-  --shadow-raised: 0 2px 8px 0 rgba(0, 0, 0, 0.08), 0 1px 2px 0 rgba(0, 0, 0, 0.04);
-  --shadow-raised-sm: 0 1px 4px 0 rgba(0, 0, 0, 0.08), 0 1px 2px 0 rgba(0, 0, 0, 0.04);
-  --shadow-pressed: inset 0 1px 3px 0 rgba(0, 0, 0, 0.12);
-  --shadow-well: inset 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  /* Layered ambient (soft, far) + contact (tight, near) shadow, plus an inset top highlight for
+     a glossy "raised surface" read rather than a flat drop shadow. */
+  --shadow-raised:
+    0 12px 28px -6px rgba(0, 0, 0, 0.16), 0 3px 8px 0 rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.9);
+  --shadow-raised-sm:
+    0 6px 16px -4px rgba(0, 0, 0, 0.14), 0 2px 4px 0 rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.85);
+  --shadow-pressed:
+    inset 0 2px 6px 0 rgba(0, 0, 0, 0.22), inset 0 -1px 0 0 rgba(255, 255, 255, 0.5);
+  --shadow-well: inset 0 1px 3px 0 rgba(0, 0, 0, 0.12), inset 0 -1px 0 0 rgba(255, 255, 255, 0.7);
 
   /* System font first: on Apple devices this resolves to San Francisco itself, which Apple
      doesn't license as a web font — this is the standard way sites get the authentic look

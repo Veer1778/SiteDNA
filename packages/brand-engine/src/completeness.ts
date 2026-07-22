@@ -5,7 +5,15 @@ import type { CompletenessReport, Gap } from "./schema.js";
 /** Below this confidence, a present color role still counts as a (low-confidence) gap. */
 export const LOW_CONFIDENCE_THRESHOLD = 0.6;
 
-const COLOR_ROLES = [
+/**
+ * Roles a typical marketing/brand site realistically has, and that the score is based on.
+ * `success`/`warning`/`danger` (the rest of `ColorRolesSchema`) are deliberately excluded: they're
+ * app-UI conventions, not brand colors, and most marketing sites simply don't have them — scoring
+ * them would drag every site's completeness down for something most sites were never going to
+ * have. They're still reported in `BrandJson.colors` when the extractor does find them; this only
+ * affects the completeness score/gap list.
+ */
+const CORE_COLOR_ROLES = [
   "primary",
   "secondary",
   "accent",
@@ -13,9 +21,6 @@ const COLOR_ROLES = [
   "background",
   "text",
   "border",
-  "success",
-  "warning",
-  "danger",
 ] as const;
 
 const LOGO_SLOTS = ["light", "dark", "favicon"] as const;
@@ -28,7 +33,7 @@ interface Checklist {
 
 function checkColorRole(
   checklist: Checklist,
-  role: (typeof COLOR_ROLES)[number],
+  role: (typeof CORE_COLOR_ROLES)[number],
   brandJson: BrandJson,
 ): void {
   checklist.totalPoints += 1;
@@ -68,10 +73,9 @@ function checkPresence(
 }
 
 /**
- * A simple, documented completeness heuristic over a fixed checklist: every `ColorRoles` role
- * (including `success`/`warning`/`danger`, which no phase can currently detect — reporting them
- * honestly is more useful than excluding them to inflate the score), every logo slot,
- * non-empty spacing/radius/shadows/animations/voice/styleClassification, and `components`
+ * A simple, documented completeness heuristic over a fixed checklist: the 7 `CORE_COLOR_ROLES`
+ * (`success`/`warning`/`danger` are excluded from scoring — see its doc comment), every logo
+ * slot, non-empty spacing/radius/shadows/animations/voice/styleClassification, and `components`
  * (always flagged — no phase implements component detection yet). Typography is excluded: it
  * has no confidence field and always has *some* value (a documented fallback), so a presence
  * check would be vacuous.
@@ -79,7 +83,7 @@ function checkPresence(
 export function computeCompleteness(brandJson: BrandJson): CompletenessReport {
   const checklist: Checklist = { totalPoints: 0, earnedPoints: 0, gaps: [] };
 
-  for (const role of COLOR_ROLES) checkColorRole(checklist, role, brandJson);
+  for (const role of CORE_COLOR_ROLES) checkColorRole(checklist, role, brandJson);
 
   for (const slot of LOGO_SLOTS) {
     checkPresence(

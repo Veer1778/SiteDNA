@@ -4,6 +4,27 @@ All notable changes to this project are documented here, in [Keep a Changelog](h
 format. This project doesn't ship versioned releases yet (see [ROADMAP via Claude.md](./Claude.md)),
 so entries are grouped by phase rather than version number.
 
+## [Post-5b] — Gaps display, deeper tactile theme, completeness re-scoring
+
+### Added
+
+- New "Gaps" card on the Brand Kit dashboard: every `completeness.gaps` entry, readable (e.g.
+  "Surface color — no surface color detected"), icon-distinguished by severity (missing vs
+  low-confidence). Previously the gap list was computed but never actually shown anywhere in the
+  UI — only the aggregate score was.
+
+### Changed
+
+- **`packages/brand-engine`**: `success`/`warning`/`danger` color roles are now excluded from
+  the completeness score entirely, rather than counted and reported missing. They're app-UI
+  status-color conventions, not brand colors — most marketing sites never have them, so scoring
+  them dragged every site's completeness down for something it was never going to have. Still
+  reported in `BrandJson.colors` when found; this only changes the score/gap list. Updated the
+  golden-file fixture and added a regression test.
+- **`apps/web`**: the theme's tactile depth was turned back up within the black-and-white
+  palette — layered ambient+contact shadows with a faint inset top highlight (a glossy "raised
+  surface" cue) on cards, and a real gradient (not a flat fill) on the primary black pill button.
+
 ## [Post-5b] — Dashboard redesign, Apple-style theme, bare-domain input
 
 ### Added

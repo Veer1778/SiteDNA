@@ -34,6 +34,45 @@ describe("computeCompleteness", () => {
     expect(secondaryGap?.severity).toBe("low-confidence");
   });
 
+  it("doesn't penalize missing success/warning/danger colors — most marketing sites don't have them", () => {
+    const report = computeCompleteness(
+      makeBrandJson({
+        colors: {
+          primary: { hex: "#1a56db", confidence: 0.9 },
+          secondary: { hex: "#7e3af2", confidence: 0.9 },
+          accent: { hex: "#0e9f6e", confidence: 0.9 },
+          surface: { hex: "#f9fafb", confidence: 0.9 },
+          background: { hex: "#ffffff", confidence: 0.9 },
+          text: { hex: "#111827", confidence: 0.9 },
+          border: { hex: "#e5e7eb", confidence: 0.9 },
+        },
+        logo: {
+          light: { url: "https://example.test/l.svg", width: 1, height: 1, format: "svg" },
+          dark: { url: "https://example.test/d.svg", width: 1, height: 1, format: "svg" },
+          favicon: { url: "https://example.test/f.svg", width: 1, height: 1, format: "svg" },
+        },
+        spacing: [4, 8],
+        radius: [4],
+        shadows: [{ offsetX: 0, offsetY: 1, blur: 2, spread: 0, color: "#000000", inset: false }],
+        animations: { durations: [200], easings: ["ease"] },
+        components: [
+          {
+            type: "button",
+            screenshotRef: "x.png",
+            boundingBox: { x: 0, y: 0, width: 1, height: 1 },
+          },
+        ],
+        voice: ["confident"],
+        styleClassification: [{ label: "modern", score: 0.8 }],
+      }),
+    );
+
+    expect(report.score).toBe(1);
+    expect(report.gaps.some((g) => g.field === "colors.success")).toBe(false);
+    expect(report.gaps.some((g) => g.field === "colors.warning")).toBe(false);
+    expect(report.gaps.some((g) => g.field === "colors.danger")).toBe(false);
+  });
+
   it("scores a fully-populated Brand JSON at 1", () => {
     const fullColors = {
       primary: { hex: "#1a56db", confidence: 0.9 },

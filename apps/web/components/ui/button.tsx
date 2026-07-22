@@ -4,11 +4,14 @@ import type { ButtonHTMLAttributes } from "react";
 import { cn } from "../../lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-all active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center gap-2 rounded-full font-medium shadow-raised-sm transition-all active:scale-[0.97] active:shadow-pressed disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
-        primary: "bg-accent text-white hover:bg-accent-hover",
+        // A real gradient (not just a flat fill) plus the inset top highlight from
+        // shadow-raised-sm reads as a glossy raised pill, not a flat black rectangle.
+        primary:
+          "bg-gradient-to-b from-[#3a3a3c] to-black text-white hover:from-[#48484a] hover:to-[#1d1d1f]",
         secondary: "bg-paper-well text-ink hover:bg-border-soft",
       },
       size: {

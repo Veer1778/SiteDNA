@@ -97,7 +97,7 @@
     ]
   },
   "completeness": {
-    "score": 0.6,
+    "score": 0.71,
     "gaps": [
       {
         "field": "colors.secondary",
@@ -113,21 +113,6 @@
         "field": "colors.surface",
         "severity": "missing",
         "message": "no surface color detected"
-      },
-      {
-        "field": "colors.success",
-        "severity": "missing",
-        "message": "no success color detected"
-      },
-      {
-        "field": "colors.warning",
-        "severity": "missing",
-        "message": "no warning color detected"
-      },
-      {
-        "field": "colors.danger",
-        "severity": "missing",
-        "message": "no danger color detected"
       },
       {
         "field": "logo.dark",
