@@ -65,7 +65,7 @@ export default function HomePage() {
           AI-powered brand extraction
         </span>
 
-        <h1 className="font-display text-5xl font-semibold text-ink sm:text-6xl">BrandKit AI</h1>
+        <h1 className="text-5xl font-semibold tracking-tight text-ink sm:text-6xl">BrandKit AI</h1>
 
         <p className="max-w-md text-lg text-ink-muted">
           Paste a public URL. We&apos;ll crawl it, extract its colors, typography, logo, and tokens,

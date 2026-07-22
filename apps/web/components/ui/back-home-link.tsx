@@ -8,7 +8,7 @@ export function BackHomeLink({ className }: { className?: string }) {
     <Link
       href="/"
       className={cn(
-        "inline-flex items-center gap-2 self-start rounded-xl bg-paper-well px-4 py-2 text-sm font-medium text-ink shadow-raised-sm transition-all active:scale-[0.98] active:shadow-pressed",
+        "inline-flex items-center gap-2 self-start rounded-full bg-paper-well px-4 py-2 text-sm font-medium text-ink transition-all hover:bg-border-soft active:scale-[0.97]",
         className,
       )}
     >

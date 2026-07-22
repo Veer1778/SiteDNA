@@ -1,17 +1,12 @@
-import { Fraunces, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 import type { ReactNode } from "react";
 
 import "./globals.css";
 
-// Self-hosted via next/font (built at compile time, no runtime request to Google Fonts).
-// Fraunces (a warm, rounded serif) carries headings — it reads as tactile/crafted, fitting the
-// skeuomorphic direction; Inter stays the body workhorse for readability at small sizes.
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  variable: "--font-fraunces",
-  weight: ["500", "600", "700"],
-  style: ["normal", "italic"],
-});
+// Self-hosted via next/font (built at compile time, no runtime request to Google Fonts). Inter
+// is the fallback for everywhere `-apple-system`/`BlinkMacSystemFont` doesn't resolve to San
+// Francisco (see globals.css's `--font-sans`) — one grotesque family, hierarchy via weight, no
+// separate display face, matching the Apple-product-page direction.
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata = {
@@ -21,7 +16,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${inter.variable}`}>
+    <html lang="en" className={inter.variable}>
       <body className="min-h-screen bg-paper text-ink antialiased">{children}</body>
     </html>
   );

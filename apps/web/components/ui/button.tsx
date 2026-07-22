@@ -4,12 +4,12 @@ import type { ButtonHTMLAttributes } from "react";
 import { cn } from "../../lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 rounded-xl font-medium shadow-raised-sm transition-all active:shadow-pressed active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-all active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
-        primary: "bg-accent text-paper-raised hover:bg-accent-hover",
-        secondary: "bg-paper-raised text-ink hover:bg-paper",
+        primary: "bg-accent text-white hover:bg-accent-hover",
+        secondary: "bg-paper-well text-ink hover:bg-border-soft",
       },
       size: {
         default: "h-11 px-6 text-sm",

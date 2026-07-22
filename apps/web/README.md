@@ -4,9 +4,10 @@ Next.js (App Router) app with Hono-backed API routes, mounted at `/api` via a si
 route handler — one `next dev`/`next build`/deployed process serves both the API and the UI. See
 [Claude.md](../../Claude.md) and [ARCHITECTURE.md](../../ARCHITECTURE.md).
 
-**Phase 5 is split into 5a (the API) and 5b (this — the web UI)**: a Light Mode Skeumorphism
-frontend — landing page, live analysis progress, and a Brand Kit viewer. No dark mode, no theme
-toggle, by design (see the Style direction section of `CHANGELOG.md`).
+**Phase 5 is split into 5a (the API) and 5b (this — the web UI)**: landing page, live analysis
+progress, and a Brand Kit viewer. No dark mode, no theme toggle, by design. The UI shipped in 5b
+as "Light Mode Skeumorphism" and was later redirected to a flat black-and-white, Apple-product-page
+look — see the Style direction section of `CHANGELOG.md` for both.
 
 ## Routes
 
@@ -67,30 +68,38 @@ version (every schema here, including `packages/shared`'s `BrandJsonSchema`, is 
 See `.env.example`. Everything is optional — `pnpm dev`/`build`/`test` all work with zero env
 vars using the local adapters and no Vision AI.
 
-## Web UI (5b)
+## Web UI (5b, later redirected to an Apple-product-page look)
 
-- **Theme**: `app/globals.css` defines the Light Mode Skeumorphism design tokens via Tailwind
-  v4's CSS-based `@theme` (no `tailwind.config.ts` — Tailwind v4 doesn't need one). Warm/paper
-  palette (`--color-paper*`, `--color-ink*`), one fixed accent, and an inset/outset shadow scale
-  (`--shadow-raised`, `--shadow-pressed`, `--shadow-well`) that gives buttons/cards a tactile,
-  pressable feel. This is BrandKit AI's own UI theme — unrelated to any `BrandJson` a user
-  analyzes.
+- **Theme**: `app/globals.css` defines the design tokens via Tailwind v4's CSS-based `@theme`
+  (no `tailwind.config.ts` — Tailwind v4 doesn't need one). Currently a flat black-and-white
+  palette (`--color-paper*` = white/near-white, `--color-ink*` = near-black/gray, `--color-accent`
+  = black) with soft, minimal shadows (`--shadow-raised`, `--shadow-pressed`, `--shadow-well`) —
+  the token _names_ are unchanged from the original "Light Mode Skeumorphism" theme (see
+  CHANGELOG), only their values, so component code didn't need per-file edits when the direction
+  changed. This is BrandKit AI's own UI theme — unrelated to any `BrandJson` a user analyzes.
+- **Type**: system font first (`-apple-system, BlinkMacSystemFont`, resolving to San Francisco on
+  Apple devices — the standard way sites get the authentic look without a public SF web-font
+  license), falling back to Inter (self-hosted via `next/font`) everywhere else. One family,
+  hierarchy via weight — no separate serif/display face.
 - **Components**: `components/ui/*` are small hand-built shadcn/ui-style primitives (Button,
   Input, Card, Badge, ProgressDial) styled with the tokens above via `class-variance-authority`
   - `lib/utils.ts`'s `cn()`. `components/brand-kit/*` render `BrandJson` slices
     (`ColorSwatchGrid`, `TypeScaleCard`, `LogoPreview`, `TokenScaleRow`,
     `ComponentsEmptyState` — the last renders an honest empty state since component detection
-    isn't implemented in any phase yet).
-- **Pages**: `app/page.tsx` (landing page + URL input, client-validated with a local Zod schema
-  — deliberately not importing `src/schema.ts`, which pulls in `@brandkit/brand-engine` and the
-  crawler/Playwright chain and must never reach the browser bundle) and
-  `app/analyze/[id]/page.tsx` (polls `GET /brand/:id` every 1.5s, renders the live `logs` stream
-  and a `ProgressDial`, swaps in the Brand Kit viewer once `status === "done"`).
+    isn't implemented in any phase yet). `TypeScaleCard` renders an actual live preview in the
+    detected typeface: it best-effort loads the family from Google Fonts (title-casing the name
+    first, since extraction preserves whatever case the site's CSS used but Google Fonts' API is
+    case-sensitive), no-ops harmlessly for system fonts or families Google Fonts doesn't have.
+- **Pages**: `app/page.tsx` (a two-column hero: URL input on the left — accepts a bare domain
+  like `spotify.com` by prepending `https://` client-side, since the input can't use
+  `type="url"`'s native validation if it's going to accept that — and a "What you'll get" feature
+  panel on the right) and `app/analyze/[id]/page.tsx` (polls `GET /brand/:id` every 1.5s, renders
+  the live `logs` stream and a `ProgressDial`, swaps in the wide Brand Kit dashboard once
+  `status === "done"`). Every page state has a "Back to home" control.
 - **Motion**: Framer Motion drives the log stream's fade-in (`AnimatePresence`); button
-  press/depress is plain CSS (`active:shadow-pressed`) to avoid Framer's `motion.button` prop
-  types colliding with native `ButtonHTMLAttributes`.
-- **Focus states**: `:focus-visible` in `globals.css` renders as a pressed/lit ring — part of
-  the tactile design language, not a bolted-on outline.
+  press/depress is plain CSS (`active:scale-*`) to avoid Framer's `motion.button` prop types
+  colliding with native `ButtonHTMLAttributes`.
+- **Focus states**: `:focus-visible` in `globals.css` renders as a clean high-contrast ring.
 
 ## Testing
 

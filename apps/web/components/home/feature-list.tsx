@@ -37,7 +37,7 @@ const FEATURES: Feature[] = [
 
 export function FeatureList() {
   return (
-    <div className="rounded-2xl bg-paper-raised p-6 shadow-raised">
+    <div className="rounded-2xl border border-border-soft/60 bg-paper-raised p-6 shadow-raised">
       <h2 className="font-display text-lg font-semibold text-ink">What you&apos;ll get</h2>
       <ul className="mt-5 flex flex-col gap-5">
         {FEATURES.map(({ icon: Icon, title, description }) => (

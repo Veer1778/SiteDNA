@@ -11,7 +11,7 @@ export interface ProgressDialProps {
 const RADIUS = 54;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
-/** A circular dial (not a flat bar) — reads as a physical gauge, part of the skeuomorphic language. */
+/** A circular dial (not a flat bar) — reads as a real gauge/progress ring rather than a bar. */
 export function ProgressDial({ percent, label, failed, className }: ProgressDialProps) {
   const clamped = Math.min(100, Math.max(0, percent));
   const offset = CIRCUMFERENCE - (clamped / 100) * CIRCUMFERENCE;
@@ -19,7 +19,7 @@ export function ProgressDial({ percent, label, failed, className }: ProgressDial
   return (
     <div
       className={cn(
-        "relative flex h-40 w-40 items-center justify-center rounded-full bg-paper-raised shadow-raised",
+        "relative flex h-40 w-40 items-center justify-center rounded-full border border-border-soft/60 bg-paper-raised shadow-raised",
         className,
       )}
       role="progressbar"

@@ -4,6 +4,36 @@ All notable changes to this project are documented here, in [Keep a Changelog](h
 format. This project doesn't ship versioned releases yet (see [ROADMAP via Claude.md](./Claude.md)),
 so entries are grouped by phase rather than version number.
 
+## [Post-5b] — Dashboard redesign, Apple-style theme, bare-domain input
+
+### Added
+
+- Split the tokens card into dedicated Spacing/Radius/Shadows/Animations cards with real values
+  (px labels, actual `box-shadow` CSS, duration/easing chips) instead of unlabeled abstract
+  bars/swatches; added a stat-tile summary row (completeness, colors found, logo variants, token
+  count) and a header showing the analyzed URL. Long token lists (spacing, shadows, durations)
+  cap at 8 with a "Show N more" toggle — one real site had 47 distinct shadows.
+- `TypeScaleCard` now renders an actual live preview in the detected typeface (best-effort
+  Google Fonts load, title-casing the family name first — Google's API is case-sensitive and
+  extraction preserves whatever case the site's own CSS used).
+- Landing page redesigned as a two-column hero (URL input + a "What you'll get" feature panel);
+  a "Back to home" control added to every analyze-page state, not just the completed dashboard.
+- The URL input now accepts a bare domain (`spotify.com`) — normalized to `https://spotify.com/`
+  client-side before validation, since `type="url"`'s native browser validation requires a
+  scheme and would otherwise block submission before any of our own JS runs.
+
+### Style direction (supersedes the Phase 5b "Light Mode Skeumorphism" entry below)
+
+- The UI was redirected from the warm-paper skeuomorphic theme to a flat black-and-white,
+  Apple-product-page look: white/near-white surfaces, near-black text, soft minimal shadows
+  (no more inset "pressed into paper" treatment), pill-shaped buttons, and a system-font-first
+  type stack (`-apple-system` → San Francisco on Apple devices, Inter elsewhere) replacing the
+  Fraunces serif display face. Implemented by changing the _values_ behind the same CSS custom
+  property names (`--color-paper`, `--shadow-raised`, etc.) rather than renaming them, so no
+  component needed a per-file edit for the theme itself — only a few hardcoded radius/shadow
+  classes (buttons → pill-shaped, cards → added a subtle border for definition against the new
+  white-on-white background) were touched directly.
+
 ## [Post-5b] — Real-world crawl hardening
 
 Found by manually testing the deployed Phase 5b UI against real sites (not fixtures) — a mix

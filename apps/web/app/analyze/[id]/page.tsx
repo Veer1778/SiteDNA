@@ -142,7 +142,7 @@ export default function AnalyzePage() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-6xl flex-col gap-8 px-4 py-10 sm:px-6 lg:px-8">
-      <header className="flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-paper-raised px-5 py-4 shadow-raised">
+      <header className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border-soft/60 bg-paper-raised px-5 py-4 shadow-raised">
         <div className="min-w-0">
           <p className="text-xs font-semibold tracking-wide text-ink-muted uppercase">
             Analyzed site
@@ -151,7 +151,7 @@ export default function AnalyzePage() {
         </div>
         <Link
           href="/"
-          className="rounded-xl bg-paper-well px-4 py-2 text-sm font-medium text-ink shadow-raised-sm active:shadow-pressed"
+          className="rounded-full bg-paper-well px-4 py-2 text-sm font-medium text-ink transition-all hover:bg-border-soft active:scale-[0.97]"
         >
           Analyze another site
         </Link>
